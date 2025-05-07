@@ -23,8 +23,8 @@ Stears Lite is a data-driven frontend application that lets users explore macroe
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-username/stears-lite-frontend.git
-   cd stears-lite-frontend
+   git clone https://github.com/Toluwaa-o/stears-lite.git
+   cd stears-lite
    ```
 
 2. **Install dependencies**
