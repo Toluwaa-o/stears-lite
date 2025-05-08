@@ -27,7 +27,7 @@ const LoadingPageLayout = ({ scrapingPage }: Prop) => {
     }, []);
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white px-4 absolute top-0 left-0 w-screen z-[101]">
+        <div className="flex flex-col items-center justify-center h-screen max-h-screen bg-gradient-to-b from-black via-gray-900 to-black text-white px-4 absolute top-0 left-0 w-screen z-[101]">
             <div className="mb-6 scale-125 animate-spin-slow">
                 <CircularIndeterminate />
             </div>

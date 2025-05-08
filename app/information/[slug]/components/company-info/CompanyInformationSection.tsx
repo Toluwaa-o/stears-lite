@@ -36,13 +36,16 @@ const CompanyInformationSection = ({ articles, company_information, section, set
 
             {isLargeScreen ? (
                 section === 'overview' && (
-                    <div className="grid lg:grid-cols-2 gap-6 h-full overflow-y-scroll custom-scroll">
-                        {/* Info Section */}
-                        <InfoTable company_information={company_information} domainSuffixes={domainSuffixes} />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[80vh]">
+                        <div className="overflow-y-auto custom-scroll rounded-xl border border-white/10 p-4">
+                            <InfoTable company_information={company_information} domainSuffixes={domainSuffixes} />
+                        </div>
 
-                        {/* Articles Section */}
-                        <ArticlesList articles={articles} />
+                        <div className="overflow-y-auto custom-scroll rounded-xl border border-white/10 p-4">
+                            <ArticlesList articles={articles} />
+                        </div>
                     </div>
+
                 )
             ) : (
                 <>
