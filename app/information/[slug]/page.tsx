@@ -2,7 +2,7 @@ import { CompanyData, Article } from "@/types/Interfaces";
 import PageStructure from "./components/layout/PageStructure";
 
 async function getCompanyData(slug: string): Promise<CompanyData> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/information/${slug}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/information/${slug}`, { cache: 'force-cache' });
     if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || "Something went wrong! Please try again.");
@@ -10,16 +10,19 @@ async function getCompanyData(slug: string): Promise<CompanyData> {
     return res.json();
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-    const data = await getCompanyData(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
+    const data = await getCompanyData(slug);
+    
     return {
         title: `${data.company} - Company Insights`,
         description: `Explore comprehensive data about ${data.company}, including public sentiment, macroeconomic context in ${data.country}, and financial history.`,
     };
 }
 
-const page = async ({ params }: { params: { slug: string } }) => {
-    const data = await getCompanyData(params.slug);
+const page = async ({ params, }: { params: Promise<{ slug: string }> }) => {
+    const { slug } = await params
+    const data = await getCompanyData(slug);
 
     const { articles, company, description, country, macro_details, company_information } = data;
 

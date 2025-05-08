@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState, FormEvent } from "react"
+import { useEffect, useState, FormEvent, useMemo } from "react"
 import { IoMdSearch } from "react-icons/io";
 import { useRouter } from 'next/navigation'
 
 const SearchBar = () => {
     const router = useRouter()
-    const companyNames = [
+    const companyNames = useMemo(() => [
         "Dangote Group",
         "MTN Group",
         "Safaricom",
@@ -15,7 +15,7 @@ const SearchBar = () => {
         "Andela",
         "Paystack",
         "Opay",
-    ]
+    ], [])
 
     const randomStartingInteger = Math.floor(Math.random() * companyNames.length);
 
