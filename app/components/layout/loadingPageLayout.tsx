@@ -21,7 +21,7 @@ const LoadingPageLayout = ({ scrapingPage }: Prop) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setStep((prev) => (prev < messages.length - 1 ? prev + 1 : prev));
-        }, 9000); // 12 seconds per step
+        }, 5000); // 5 seconds per step
 
         return () => clearInterval(interval);
     }, []);
