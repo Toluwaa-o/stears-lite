@@ -25,8 +25,8 @@ const Dashboard = ({ macro_details, selectedCategory }: { macro_details: MacroDe
                     <p className="text-2xl font-bold text-white mb-4">
                         {metric.current_value.toLocaleString()} {
                             typeof metric.percentage_difference === 'number' && metric.percentage_difference ?
-                                <span className={`ml-2 text-sm ${metric.percentage_difference > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                    ({metric.percentage_difference > 0 ? '+' : ''}{(metric.percentage_difference).toFixed(1)}% <span className="text-gray-400">vs 2020</span>)
+                                <span className={`ml-2 text-sm text-gray-400`}>
+                                    (<span className={`${metric.percentage_difference > 0 ? 'text-green-500' : 'text-red-500'}`}>{metric.percentage_difference > 0 ? '+' : ''}{(metric.percentage_difference).toFixed(1)}%</span> vs 2020)
                                 </span>
                                 : ''}
                     </p>

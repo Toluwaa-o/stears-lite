@@ -7,7 +7,7 @@ Stears Lite is a data-driven frontend application that lets users explore macroe
 * **Next.js** + **TypeScript**
 * **TailwindCSS** for styling
 * **Radix UI** for accessible components
-* **Chart.js / Recharts** for data visualization
+* **MUI Charts** for data visualization
 * **FastAPI** backend (external API)
 
 ## 🚀 Features

@@ -29,7 +29,7 @@ const PageStructure = ({ company, country, percentage_of_negatives, percentage_o
     }, [isLargeScreen]);
 
     return (
-        <div className="flex flex-col gap-6 w-full max-w-full text-white min-h-screen px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex flex-col gap-6 w-full max-w-full text-white min-h-screen px-4 sm:px-6 lg:px-8 py-6 lg:py-4">
             {/* Company Card */}
             <div className="space-y-6 border border-[#1F1F1F] rounded-2xl p-6 bg-[#0F0F0F] w-full max-w-3xl mx-auto lg:max-h-[40%]">
 

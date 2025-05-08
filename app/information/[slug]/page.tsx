@@ -1,27 +1,33 @@
 import { CompanyData, Article } from "@/types/Interfaces";
 import PageStructure from "./components/layout/PageStructure";
 
-
-const page = async ({
-    params,
-}: {
-    params: Promise<{ slug: string }>
-}) => {
-    const { slug } = await params
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/information/${slug}`)
-
+async function getCompanyData(slug: string): Promise<CompanyData> {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/information/${slug}`);
     if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || "Something went wrong! Please try again.");
     }
+    return res.json();
+}
 
-    const { articles, company, description, country, macro_details, company_information }: CompanyData = await res.json()
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+    const data = await getCompanyData(params.slug);
+    return {
+        title: `${data.company} - Company Insights`,
+        description: `Explore comprehensive data about ${data.company}, including public sentiment, macroeconomic context in ${data.country}, and financial history.`,
+    };
+}
 
-    const positives = articles.filter((article: Article) => article.sentiment_score > 0.05)
-    const percentage_of_positives = (positives.length / articles.length) * 100
+const page = async ({ params }: { params: { slug: string } }) => {
+    const data = await getCompanyData(params.slug);
 
-    const negatives = articles.filter((article: Article) => article.sentiment_score < -0.05)
-    const percentage_of_negatives = (negatives.length / articles.length) * 100
+    const { articles, company, description, country, macro_details, company_information } = data;
+
+    const positives = articles.filter((article: Article) => article.sentiment_score > 0.05);
+    const percentage_of_positives = (positives.length / articles.length) * 100;
+
+    const negatives = articles.filter((article: Article) => article.sentiment_score < -0.05);
+    const percentage_of_negatives = (negatives.length / articles.length) * 100;
 
     return (
         <PageStructure
@@ -34,8 +40,7 @@ const page = async ({
             description={description}
             macro_details={macro_details}
         />
+    );
+};
 
-    )
-}
-
-export default page
+export default page;

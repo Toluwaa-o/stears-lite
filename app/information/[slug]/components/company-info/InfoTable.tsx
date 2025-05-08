@@ -5,7 +5,7 @@ interface InfoTableProps {
 
 const InfoTable = ({ company_information, domainSuffixes }: InfoTableProps) => {
     return (
-        <div className="block lg:block h-full overflow-y-scroll custom-scroll lg:max-h-[50vh]">
+        <div className="block lg:block h-full overflow-y-scroll custom-scroll w-full lg:max-h-[60vh]">
             <table className="w-full table-fixed border-separate border-spacing-y-2">
                 <tbody>
                     {Object.entries(company_information).map(([key, value], i) => (

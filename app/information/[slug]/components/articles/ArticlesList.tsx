@@ -9,14 +9,29 @@ interface ArticlesListProps {
 
 const ArticlesList = ({ articles }: ArticlesListProps) => {
     return (
-        <div className="block lg:block h-full overflow-y-scroll custom-scroll lg:max-h-[50vh]">
+        <div className="block h-full overflow-y-scroll custom-scroll lg:max-h-[60vh] relative">
+            <div className="flex justify-around items-center gap-4 py-4 text-sm sm:text-base sticky top-0 bg-black z-50">
+                <div className="flex flex-col items-center gap-1">
+                    <Chevron sentiment_score={0.06} label={true} />
+                    <p className="text-white text-xs sm:text-sm">Positive</p>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                    <Chevron sentiment_score={-0.06} label={true} />
+                    <p className="text-white text-xs sm:text-sm">Negative</p>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                    <Chevron sentiment_score={0.0} label={true} />
+                    <p className="text-white text-xs sm:text-sm">Neutral</p>
+                </div>
+            </div>
+
             <div className="transition-all gap-4 grid pb-4">
                 <div className="flex flex-col gap-4">
                     {articles.map(({ id, title, published, link, source, source_link, sentiment_score }) => {
                         const date = new Date(published);
                         return (
                             <div key={id} className="flex flex-col max-w-full">
-                                <div className="grid gap-2 my-6 min-h-[12vh]">
+                                <div className="grid gap-2 my-0 min-h-[12vh] md:my-4">
                                     <a
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -24,7 +39,7 @@ const ArticlesList = ({ articles }: ArticlesListProps) => {
                                         className="text-base font-semibold flex items-center gap-2 hover:underline hover:text-blue-400 transition-all max-w-full overflow-hidden"
                                     >
                                         <div className="shrink-0">
-                                            <Chevron sentiment_score={sentiment_score} />
+                                            <Chevron sentiment_score={sentiment_score} label={false} />
                                         </div>
                                         <h3 className="break-words text-sm sm:text-base text-white leading-tight">
                                             {title.replace(/^[^\w\s]+/, '').trim()}
@@ -50,6 +65,7 @@ const ArticlesList = ({ articles }: ArticlesListProps) => {
                 </div>
             </div>
         </div>
+
     );
 };
 
