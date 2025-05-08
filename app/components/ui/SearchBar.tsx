@@ -17,13 +17,13 @@ const SearchBar = () => {
         "Opay",
     ]
 
-    let randomStartingInteger = Math.floor(Math.random() * companyNames.length);
+    const randomStartingInteger = Math.floor(Math.random() * companyNames.length);
 
     const [placeholderCompany, setPlaceHolderCompany] = useState<string>(companyNames[randomStartingInteger])
 
     useEffect(() => {
         const updatePlaceHolderCompany = setInterval(() => {
-            let newRandomInteger = Math.floor(Math.random() * companyNames.length);
+            const newRandomInteger = Math.floor(Math.random() * companyNames.length);
 
             if (companyNames[newRandomInteger] !== placeholderCompany) {
                 setPlaceHolderCompany(companyNames[newRandomInteger])
@@ -37,7 +37,7 @@ const SearchBar = () => {
         }, 10000)
 
         return () => clearInterval(updatePlaceHolderCompany)
-    }, [useState])
+    }, [companyNames, placeholderCompany])
 
     const [company, setCompany] = useState<string>("")
     const [errorMessage, setErrorMessage] = useState<string>("")

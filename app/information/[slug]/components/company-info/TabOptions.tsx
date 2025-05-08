@@ -4,7 +4,7 @@ interface Option {
 }
 
 
-const TabOptions = ({ tabOptions, section, setSection }: { tabOptions: Option[], section: string, setSection: Function }) => {
+const TabOptions = ({ tabOptions, section, setSection }: { tabOptions: Option[], section: string, setSection: React.Dispatch<React.SetStateAction<string>> }) => {
     return (
         <span className="flex items-center text-sm gap-3 tracking-wider mb-4 lg:sticky lg:top-0 lg:bg-black lg:z-50">
             {tabOptions.map(({ key, label }) => (

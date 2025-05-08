@@ -1,4 +1,4 @@
-const DropDownMenu = ({ selectedCategory, setSelectedCategory, categories }: { selectedCategory: string, setSelectedCategory: Function, categories: string[] }) => {
+const DropDownMenu = ({ selectedCategory, setSelectedCategory, categories }: { selectedCategory: string, setSelectedCategory: React.Dispatch<React.SetStateAction<string>>, categories: string[] }) => {
     return (
         <div className="flex justify-center">
             <select

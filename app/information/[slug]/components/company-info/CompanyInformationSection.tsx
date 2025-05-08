@@ -9,7 +9,7 @@ interface Props {
     articles: Article[],
     company_information: Record<string, string>,
     section: string,
-    setSection: Function,
+    setSection: React.Dispatch<React.SetStateAction<string>>,
     macro_details: MacroDetails,
     country: string
 }
