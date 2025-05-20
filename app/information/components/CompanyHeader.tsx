@@ -1,0 +1,40 @@
+interface CompanyHeaderProps {
+    company: string;
+    description: string;
+    country: string;
+    company_info: {
+        [key: string]: string;
+    };
+    company_info_fixed: {
+        [key: string]: string;
+    };
+}
+
+const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, country, company_info, company_info_fixed }) => {
+    return (
+        <div className="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-xl p-6 shadow-lg shadow-black/30 text-white">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold">{company}</h1>
+                    <p className="text-blue-100 mt-2 max-w-2xl">{description}</p>
+                    <div className="flex items-center mt-4 space-x-4">
+                        <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm flex items-center">
+                            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                            </svg>
+                            {country}
+                        </span>
+                        <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm">
+                            Industry : {company_info_fixed.industry || 'N/A'}
+                        </span>
+                        <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm">
+                            Founded : {company_info.founded?.split(';')[0] || 'N/A'}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default CompanyHeader;

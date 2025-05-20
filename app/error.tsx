@@ -9,22 +9,22 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
     }, [error]);
 
     return (
-        <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white px-6 text-center">
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-black px-6 text-center">
             <h1 className="text-[6rem] sm:text-[7rem] font-extrabold tracking-tight">Error</h1>
-            <p className="text-xl sm:text-2xl text-gray-300 mb-6 max-w-md">
+            <p className="text-xl sm:text-2xl text-gray-800 mb-6 max-w-md">
                 {error.message || "Something went wrong. Please try again."}
             </p>
 
             <div className="flex gap-4">
                 <button
                     onClick={() => reset()}
-                    className="px-6 py-2 border border-white text-sm sm:text-base rounded-md hover:bg-white hover:text-black transition"
+                    className="px-6 py-2 border border-black text-sm sm:text-base rounded-md hover:bg-black hover:text-white transition"
                 >
                     Try Again
                 </button>
                 <Link
                     href="/"
-                    className="px-6 py-2 border border-white text-sm sm:text-base rounded-md hover:bg-white hover:text-black transition"
+                    className="px-6 py-2 border border-black text-sm sm:text-base rounded-md hover:bg-black hover:text-white transition"
                 >
                     Go Home
                 </Link>

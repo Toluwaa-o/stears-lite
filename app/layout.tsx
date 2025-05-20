@@ -3,6 +3,8 @@ import { Open_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { MdManageSearch } from "react-icons/md";
+import Header from "./components/ui/Header";
+import Footer from "./components/ui/Footer";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -28,31 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${openSans.className} antialiased font-[family-name:var(--font-open-sans)] bg-black max-w-screen min-h-screen overflow-x-hidden relative`}
+        className={`${openSans.className} antialiased font-[family-name:var(--font-open-sans)] bg-gray-50 max-w-screen min-h-screen overflow-x-hidden relative`}
       >
-        <header className="w-full px-4 sm:px-5 py-2 border-b border-gray-800 bg-[#0F0F0F] text-white flex items-center justify-between sticky top-0 z-100">
-          {/* Logo and Title */}
-          <div className="flex items-center gap-1">
-            <MdManageSearch size={30} color="white" />
-            <h1 className={`${cormorantGaramond.className} text-lg sm:text-xl font-medium`}>
-              Stears Lite
-            </h1>
-          </div>
+        <Header />
 
-          {/* Home Button */}
-          <Link
-            href="/"
-            className="text-xs sm:text-sm border border-gray-500 px-2.5 py-1 rounded hover:bg-white hover:text-black transition"
-          >
-            Home
-          </Link>
-        </header>
-
-
-        <main className="p-4 w-screen overflow-x-hidden">
+        <main className="w-screen overflow-x-hidden">
           {children}
         </main>
-        <footer className="p-4"></footer>
+        <Footer />
       </body>
     </html>
   );

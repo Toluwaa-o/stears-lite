@@ -1,12 +1,3 @@
-export interface CompanyData {
-    articles: Article[];
-    company: string;
-    description: string;
-    country: string;
-    macro_details: MacroDetails;
-    company_information: Record<string, string>;
-}
-
 export interface Article {
     id: string;
     title: string;
@@ -17,24 +8,34 @@ export interface Article {
     sentiment_score: number;
 }
 
-export interface MacroDetails {
-    [category: string]: {
-        [metric: string]: MacroMetric;
-    };
+export interface Competitors {
+    "Competitor Name": string[];
+    Revenue: string[];
+    "Number of Employees": string[];
+    "Employee Growth": string[];
+    "Total Funding": string[];
+    Valuation: string[];
 }
 
-export interface MacroMetric {
+export interface FundingRound {
+    Date: string[];
+    Amount: string[];
+    Round: string[];
+    "Lead Investors": string[];
+    Reference: string[];
+}
+
+export interface CompanyData {
+    company: string;
+    company_info_fixed: {
+        [key: string]: string;
+    };
+    company_info: {
+        [key: string]: string;
+    };
     description: string;
-    current_value: number;
-    trend: {
-        year: number[];
-        value: number[];
-    };
-    comparison: {
-        regional: number;
-        national: number;
-    };
-    percentage_difference: number;
-    volatility_label: string;
+    country: string;
+    articles: Article[];
+    competitors: Competitors;
+    funding: FundingRound
 }
-

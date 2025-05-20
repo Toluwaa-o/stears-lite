@@ -62,23 +62,28 @@ const SearchBar = () => {
 
     return (
         <form
-            className="flex flex-col items-center justify-center gap-4 w-full"
+            className="flex flex-col items-start justify-center gap-4 w-full"
             onSubmit={handleSubmit}
         >
-            <div className={`flex items-center border ${errorMessage ? 'border-red-400' : 'border-gray-500'} bg-[#1a1a1a] rounded-md overflow-hidden h-12 w-full max-w-2xl focus-within:ring-2 ${errorMessage ? 'focus-within:ring-red-400' : 'focus-within:ring-white'} transition`}>
+            <div className={`flex items-center border ${errorMessage ? 'border-red-500' : 'border-gray-300'
+                } bg-white rounded-md overflow-hidden h-12 w-full max-w-2xl focus-within:ring-2 ${errorMessage ? 'focus-within:ring-red-500/30' : 'focus-within:ring-blue-500/30'
+                } transition-all duration-200 shadow-sm`}>
                 <input
                     type="text"
                     aria-label="Company"
                     placeholder={`${errorMessage ? errorMessage : 'Search ' + '"' + placeholderCompany + '"'}`}
                     name="company"
-                    className={`bg-transparent ${errorMessage ? "placeholder:text-red-400" : 'placeholder:text-gray-500'} w-full h-full px-4 py-2 outline-none text-sm sm:text-base placeholder-gray-400 text-white`}
+                    className={`bg-transparent ${errorMessage ? "placeholder:text-red-500" : 'placeholder:text-gray-500'
+                        } w-full h-full px-4 py-2 outline-none text-sm sm:text-base text-gray-900`}
                     onChange={(e) => setCompany(e.target.value)}
                 />
                 <button
                     type="submit"
-                    className="h-full px-4 hover:bg-gray-700 transition"
+                    className={`h-full px-4 transition-colors ${errorMessage ? 'hover:bg-red-50' : 'hover:bg-blue-50'
+                        }`}
                 >
-                    <IoMdSearch fill={`${errorMessage ? 'oklch(70.4% 0.191 22.216)' : 'white'}`} size={20} />
+                    <IoMdSearch className={`${errorMessage ? 'text-red-500' : 'text-blue-600'
+                        }`} size={20} />
                 </button>
             </div>
         </form>
