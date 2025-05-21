@@ -9,22 +9,24 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
     }, [error]);
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center text-black px-6 text-center">
-            <h1 className="text-[6rem] sm:text-[7rem] font-extrabold tracking-tight">Error</h1>
-            <p className="text-xl sm:text-2xl text-gray-800 mb-6 max-w-md">
+        <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 text-center">
+            <h1 className="text-[6rem] sm:text-[7rem] font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
+                Error
+            </h1>
+            <p className="text-xl sm:text-2xl text-gray-600 mb-8 max-w-md leading-relaxed">
                 {error.message || "Something went wrong. Please try again."}
             </p>
 
             <div className="flex gap-4">
                 <button
                     onClick={() => reset()}
-                    className="px-6 py-2 border border-black text-sm sm:text-base rounded-md hover:bg-black hover:text-white transition"
+                    className="px-6 py-3 border border-blue-600 text-blue-600 text-sm sm:text-base font-medium rounded-md hover:bg-blue-600 hover:text-white transition-colors duration-200"
                 >
                     Try Again
                 </button>
                 <Link
                     href="/"
-                    className="px-6 py-2 border border-black text-sm sm:text-base rounded-md hover:bg-black hover:text-white transition"
+                    className="px-6 py-3 bg-blue-600 text-white text-sm sm:text-base font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm"
                 >
                     Go Home
                 </Link>

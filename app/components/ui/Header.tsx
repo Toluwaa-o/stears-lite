@@ -19,7 +19,6 @@ export default function Header() {
 
     return (
         <header className="w-full px-6 py-4 border-b border-gray-800 bg-gray-50 text-black sticky top-0 z-50 flex items-center justify-between">
-            {/* Branding */}
             <div className="flex items-center gap-2">
                 <RiSearchEyeLine size={26} className="text-black" />
                 <Link href="/" className={`${playfair.className} text-xl tracking-tight hover:opacity-80 transition`}>
@@ -27,7 +26,6 @@ export default function Header() {
                 </Link>
             </div>
 
-            {/* Conditional Nav */}
             {!isHome && <nav>
                 <Link
                     href={"/"}
