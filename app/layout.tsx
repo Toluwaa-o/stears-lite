@@ -1,20 +1,12 @@
 import type { Metadata } from "next";
 import { Open_Sans, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import { MdManageSearch } from "react-icons/md";
 import Header from "./components/ui/Header";
 import Footer from "./components/ui/Footer";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
   subsets: ["latin"],
-});
-
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-cormorant-garamond",
-  subsets: ["latin"],
-  weight: "400"
 });
 
 export const metadata: Metadata = {

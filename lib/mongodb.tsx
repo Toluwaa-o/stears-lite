@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { CompanyDataModel } from "@/models/CompanyData";
+// import { CompanyDataModel } from "@/models/CompanyData";
 
 const MONGO_URI = process.env.MONGO_URI || "";
 if (!MONGO_URI) {

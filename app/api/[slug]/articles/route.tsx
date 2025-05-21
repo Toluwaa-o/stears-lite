@@ -1,11 +1,12 @@
 import connectDB from "@/lib/mongodb";
-import { CompanyDataModel } from "@/models/CompanyData";
+// import { CompanyDataModel } from "@/models/CompanyData";
 import fetchGoogleNews from "@/utils/FetchArticles";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export const GET = async (request: NextRequest, { params }: { params: Promise<{ slug: string }> }): Promise<NextResponse> => {
+export const GET = async ({ params }: { params: Promise<{ slug: string }> }): Promise<NextResponse> => {
   await connectDB;
-
+  const { slug } = await params
+  console.log(slug)
   // const company = await CompanyDataModel.findById(slug).select('company')
   // if (!company) {
   //   throw Error("Could not find company in database")

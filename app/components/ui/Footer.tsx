@@ -1,8 +1,4 @@
-import React from 'react'
-
-type Props = {}
-
-const Footer = (props: Props) => {
+const Footer = () => {
     return (
         <footer className="mt-20 border-t border-gray-800 py-6 text-sm text-center text-gray-500">
             © {new Date().getFullYear()} Stears Lite. Inspired by{" "}

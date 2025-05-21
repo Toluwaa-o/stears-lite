@@ -12,28 +12,42 @@ interface ComparisonChartProps {
     };
 }
 
+interface ChartDataItem {
+    name: string;
+    revenue: number | null;
+    valuation: number | null;
+    employees: number;
+    funding: number | null;
+    isMainCompany: boolean;
+}
+
 const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
     // Prepare data for visualization
-    const prepareComparisonData = () => {
-        const mainCompany = {
+    const prepareComparisonData = (): ChartDataItem[] => {
+        const mainCompany: ChartDataItem = {
             name: companyData.companyName,
             revenue: parseFinancialString(companyData.company_info_fixed['annual revenue']),
             valuation: parseFinancialString(companyData.company_info_fixed['current valuation']),
             employees: companyData.employeeCount || 0,
             funding: parseFinancialString(companyData.company_info_fixed['total funding']),
+            isMainCompany: true,
         };
 
-        return companyData.competitors['Competitor Name'].map((name, index) => ({
-            name,
-            revenue: parseFinancialString(companyData.competitors['Revenue'][index]),
-            valuation: parseFinancialString(companyData.competitors['Valuation'][index]),
-            employees: parseInt(companyData.competitors['Number of Employees'][index] || '0'),
-            funding: parseFinancialString(companyData.competitors['Total Funding'][index]),
-            isMainCompany: false,
-        })).filter(item => item.revenue !== null).concat({
-            ...mainCompany,
-            isMainCompany: true,
-        });
+        const competitorsData = companyData.competitors['Competitor Name']
+            .map((name, index): ChartDataItem => ({
+                name,
+                revenue: parseFinancialString(companyData.competitors['Revenue'][index]),
+                valuation: parseFinancialString(companyData.competitors['Valuation'][index]),
+                employees: parseInt(companyData.competitors['Number of Employees'][index] || '0'),
+                funding: parseFinancialString(companyData.competitors['Total Funding'][index]),
+                isMainCompany: false,
+            }))
+            .filter(item => item.revenue !== null) as ChartDataItem[];
+
+        // Sort competitors by revenue (descending)
+        const sortedCompetitors = [...competitorsData].sort((a, b) => (b.revenue || 0) - (a.revenue || 0));
+        
+        return [mainCompany, ...sortedCompetitors];
     };
 
     const chartData = prepareComparisonData();
@@ -46,6 +60,39 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
         investor: companyData.funding['Lead Investors'][index],
     })).filter(item => item.amount !== null);
 
+    // Custom bar shape with different colors for main company
+    const renderCustomBar = (props: any) => {
+        const { fill, x, y, width, height, payload } = props;
+        const isMain = payload.isMainCompany;
+        return (
+            <rect
+                x={x}
+                y={y}
+                width={width}
+                height={height}
+                fill={isMain ? '#6366f1' : '#3b82f6'}
+                rx={4}
+                ry={4}
+            />
+        );
+    };
+
+    // Custom area shape with different colors
+    const renderCustomArea = (props: any) => {
+        const { points, payload } = props;
+        const isMain = payload.isMainCompany;
+        const path = points.map((p: any) => `${p.x},${p.y}`).join(' L');
+        return (
+            <path
+                d={`M${path}`}
+                fill={isMain ? '#c4b5fd' : '#a5b4fc'}
+                stroke={isMain ? '#7c3aed' : '#6366f1'}
+                strokeWidth={2}
+                fillOpacity={0.6}
+            />
+        );
+    };
+
     return (
         <div className="space-y-8">
             {/* Revenue Comparison Chart */}
@@ -53,17 +100,29 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
                 <h3 className="text-lg font-semibold mb-4">Revenue Comparison ($M)</h3>
                 <div className="h-80">
                     <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip formatter={(value) => [`$${value}M`, 'Revenue']} />
+                        <BarChart
+                            data={chartData}
+                            layout="vertical"
+                            margin={{ left: 100, right: 20 }}
+                            barSize={30}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                            <XAxis type="number" />
+                            <YAxis 
+                                type="category" 
+                                dataKey="name" 
+                                width={120} 
+                                tick={{ fontSize: 12 }}
+                            />
+                            <Tooltip 
+                                formatter={(value) => [`$${value}M`, 'Revenue']}
+                                contentStyle={{ borderRadius: '8px' }}
+                            />
                             <Legend />
                             <Bar
                                 dataKey="revenue"
-                                fill="#3b82f6"
                                 name="Annual Revenue"
-                                radius={[4, 4, 0, 0]}
+                                shape={renderCustomBar}
                             />
                         </BarChart>
                     </ResponsiveContainer>
@@ -76,16 +135,32 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
                     <h3 className="text-lg font-semibold mb-4">Valuation Comparison ($B)</h3>
                     <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={chartData.filter(d => d.valuation !== null)}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip formatter={(value) => [`$${value}B`, 'Valuation']} />
+                            <BarChart
+                                data={chartData.filter(d => d.valuation !== null)}
+                                layout="vertical"
+                                margin={{ left: 100, right: 20 }}
+                                barSize={30}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                                <XAxis type="number" />
+                                <YAxis 
+                                    type="category" 
+                                    dataKey="name" 
+                                    width={120} 
+                                    tick={{ fontSize: 12 }}
+                                />
+                                <Tooltip 
+                                    formatter={(value) => [`$${value}B`, 'Valuation']}
+                                    contentStyle={{ borderRadius: '8px' }}
+                                />
+                                <Legend />
                                 <Bar
                                     dataKey="valuation"
-                                    fill="#10b981"
                                     name="Valuation"
-                                    radius={[4, 4, 0, 0]}
+                                    // shape={(props) => renderCustomBar({ 
+                                    //     ...props, 
+                                    //     fill: props.payload.isMainCompany ? '#8b5cf6' : '#10b981'
+                                    // })}
                                 />
                             </BarChart>
                         </ResponsiveContainer>
@@ -96,17 +171,20 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
                     <h3 className="text-lg font-semibold mb-4">Employee Count</h3>
                     <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={chartData}>
+                            <AreaChart
+                                data={chartData}
+                                margin={{ left: 20, right: 20 }}
+                            >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
+                                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                                 <YAxis scale="log" />
                                 <Tooltip />
+                                <Legend />
                                 <Area
                                     type="monotone"
                                     dataKey="employees"
-                                    stroke="#6366f1"
-                                    fill="#a5b4fc"
                                     name="Employees"
+                                    // shape={renderCustomArea}
                                 />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -126,6 +204,7 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
                             <Tooltip
                                 formatter={(value) => [`$${value}M`, 'Amount']}
                                 labelFormatter={(date) => `Round: ${fundingData.find(d => d.date === date)?.round}`}
+                                contentStyle={{ borderRadius: '8px' }}
                             />
                             <Line
                                 type="monotone"
