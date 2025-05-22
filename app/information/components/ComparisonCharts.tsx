@@ -1,14 +1,29 @@
 import { Competitors, FundingRound } from '@/types/Interfaces';
 import parseFinancialString from '@/utils/NumberParser';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, AreaChart, Area } from 'recharts';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ScatterController, LogarithmicScale } from 'chart.js';
+import { Bar, Line, Scatter } from 'react-chartjs-2';
+
+// Register ChartJS components
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    ScatterController,
+    LogarithmicScale
+);
 
 interface ComparisonChartProps {
     companyData: {
         company_info_fixed: Record<string, string>;
         competitors: Competitors;
-        funding: FundingRound,
-        companyName: string,
-        employeeCount: number
+        funding: FundingRound;
+        companyName: string;
+        employeeCount: number;
     };
 }
 
@@ -22,6 +37,16 @@ interface ChartDataItem {
 }
 
 const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
+    const MAIN_COMPANY_COLOR = '#7c3aed';  // Vibrant purple
+    const COMPETITOR_COLOR = '#22d3ee';    // Bright teal (high contrast to purple)
+    const HIGHLIGHT_EFFECT = {
+        shadowColor: 'rgba(0,0,0,0.3)',
+        shadowBlur: 8,
+        shadowOffsetX: 2,
+        shadowOffsetY: 2
+    };
+
+
     // Prepare data for visualization
     const prepareComparisonData = (): ChartDataItem[] => {
         const mainCompany: ChartDataItem = {
@@ -46,7 +71,6 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
 
         // Sort competitors by revenue (descending)
         const sortedCompetitors = [...competitorsData].sort((a, b) => (b.revenue || 0) - (a.revenue || 0));
-        
         return [mainCompany, ...sortedCompetitors];
     };
 
@@ -60,164 +84,251 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
         investor: companyData.funding['Lead Investors'][index],
     })).filter(item => item.amount !== null);
 
-    // Custom bar shape with different colors for main company
-    const renderCustomBar = (props: any) => {
-        const { fill, x, y, width, height, payload } = props;
-        const isMain = payload.isMainCompany;
-        return (
-            <rect
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-                fill={isMain ? '#6366f1' : '#3b82f6'}
-                rx={4}
-                ry={4}
-            />
-        );
+    // Revenue chart options
+    const revenueOptions = {
+        indexAxis: 'y' as const,
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
+            title: {
+                display: true,
+                text: 'Revenue Comparison ($)',
+            },
+            tooltip: {
+                callbacks: {
+                    label: (context: any) => {
+                        return `$${context.raw}`;
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Revenue ($)'
+                }
+            }
+        }
     };
 
-    // Custom area shape with different colors
-    const renderCustomArea = (props: any) => {
-        const { points, payload } = props;
-        const isMain = payload.isMainCompany;
-        const path = points.map((p: any) => `${p.x},${p.y}`).join(' L');
-        return (
-            <path
-                d={`M${path}`}
-                fill={isMain ? '#c4b5fd' : '#a5b4fc'}
-                stroke={isMain ? '#7c3aed' : '#6366f1'}
-                strokeWidth={2}
-                fillOpacity={0.6}
-            />
-        );
+    const revenueChartData = {
+        labels: chartData.map(item => item.name),
+        datasets: [{
+            label: 'Annual Revenue',
+            data: chartData.map(item => item.revenue),
+            backgroundColor: chartData.map(item =>
+                item.isMainCompany
+                    ? MAIN_COMPANY_COLOR
+                    : COMPETITOR_COLOR
+            ),
+            borderColor: chartData.map(item =>
+                item.isMainCompany
+                    ? '#5b21b6'  // Darker purple border
+                    : '#0d9488'  // Darker teal border
+            ),
+            borderWidth: 1,
+            borderRadius: 2,
+            borderSkipped: false,
+            // Add special effects to main company bars
+            hoverBackgroundColor: chartData.map(item =>
+                item.isMainCompany ? '#9333ea' : '#06b6d4'
+            ),
+            ...HIGHLIGHT_EFFECT
+        }]
+    };
+
+
+    // Valuation chart options
+    const valuationOptions = {
+        indexAxis: 'y' as const,
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
+            title: {
+                display: true,
+                text: 'Valuation Comparison ($)',
+            },
+            tooltip: {
+                callbacks: {
+                    label: (context: any) => {
+                        return `$${context.raw}`;
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Valuation ($B)'
+                }
+            }
+        }
+    };
+
+    const valuationChartData = {
+        labels: chartData.filter(d => d.valuation !== null).map(item => item.name),
+        datasets: [{
+            label: 'Valuation',
+            data: chartData.filter(d => d.valuation !== null).map(item => item.valuation),
+            backgroundColor: chartData.filter(d => d.valuation !== null).map(item =>
+                item.isMainCompany
+                    ? MAIN_COMPANY_COLOR
+                    : COMPETITOR_COLOR
+            ),
+            borderColor: chartData.filter(d => d.valuation !== null).map(item =>
+                item.isMainCompany ? '#5b21b6' : '#0d9488'
+            ),
+            borderWidth: 1,
+            borderRadius: 2,
+            borderSkipped: false,
+            // Add striped pattern to main company bars
+            pattern: chartData.filter(d => d.valuation !== null).map(item =>
+                item.isMainCompany
+                    ? { shape: 'diagonalRight', spacing: 5, color: 'rgba(255,255,255,0.6)' }
+                    : undefined
+            ),
+            ...HIGHLIGHT_EFFECT
+        }]
+    };
+
+    // Employee chart options
+    const employeeOptions = {
+        indexAxis: 'y' as const, // Horizontal bars
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
+            title: {
+                display: true,
+                text: 'Employee Count Comparison',
+            },
+            tooltip: {
+                callbacks: {
+                    label: (context: any) => {
+                        return `${context.raw} employees`;
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Number of Employees (log scale)'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Company'
+                }
+            }
+        }
+    };
+
+    const employeeChartData = {
+        labels: chartData.map(item => item.name),
+        datasets: [{
+            label: 'Employees',
+            data: chartData.map(item => item.employees),
+            backgroundColor: chartData.map(item =>
+                item.isMainCompany
+                    ? 'rgba(124, 58, 237, 0.8)' // Purple with opacity
+                    : 'rgba(34, 211, 238, 0.6)' // Teal with opacity
+            ),
+            borderColor: chartData.map(item =>
+                item.isMainCompany
+                    ? 'rgb(124, 58, 237)' // Solid purple
+                    : 'rgb(34, 211, 238)' // Solid teal
+            ),
+            borderWidth: 2,
+            borderRadius: 6,
+            borderSkipped: false,
+            // Special effect for main company
+            hoverBackgroundColor: chartData.map(item =>
+                item.isMainCompany
+                    ? 'rgba(124, 58, 237, 1)' // Full opacity on hover
+                    : 'rgba(34, 211, 238, 0.8)'
+            ),
+        }]
+    };
+
+
+    // Funding timeline options
+    const fundingOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
+            title: {
+                display: true,
+                text: 'Funding History',
+            },
+            tooltip: {
+                callbacks: {
+                    label: (context: any) => {
+                        return `$${context.raw}M`;
+                    },
+                    title: (context: any) => {
+                        const item = fundingData[context[0].dataIndex];
+                        return `Round: ${item.round}`;
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                title: {
+                    display: true,
+                    text: 'Amount ($M)'
+                }
+            }
+        }
+    };
+
+    const fundingChartData = {
+        labels: fundingData.map(item => item.date),
+        datasets: [
+            {
+                label: 'Funding Amount',
+                data: fundingData.map(item => item.amount),
+                borderColor: '#ec4899',
+                backgroundColor: '#ec4899',
+                borderWidth: 2,
+                tension: 0.1,
+            }
+        ]
     };
 
     return (
         <div className="space-y-8">
             {/* Revenue Comparison Chart */}
             <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                <h3 className="text-lg font-semibold mb-4">Revenue Comparison ($M)</h3>
-                <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <BarChart
-                            data={chartData}
-                            layout="vertical"
-                            margin={{ left: 100, right: 20 }}
-                            barSize={30}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                            <XAxis type="number" />
-                            <YAxis 
-                                type="category" 
-                                dataKey="name" 
-                                width={120} 
-                                tick={{ fontSize: 12 }}
-                            />
-                            <Tooltip 
-                                formatter={(value) => [`$${value}M`, 'Revenue']}
-                                contentStyle={{ borderRadius: '8px' }}
-                            />
-                            <Legend />
-                            <Bar
-                                dataKey="revenue"
-                                name="Annual Revenue"
-                                shape={renderCustomBar}
-                            />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
+                <Bar options={revenueOptions} data={revenueChartData} />
             </div>
 
-            {/* Valuation vs Funding */}
+            {/* Valuation vs Employee Count */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <h3 className="text-lg font-semibold mb-4">Valuation Comparison ($B)</h3>
-                    <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart
-                                data={chartData.filter(d => d.valuation !== null)}
-                                layout="vertical"
-                                margin={{ left: 100, right: 20 }}
-                                barSize={30}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                                <XAxis type="number" />
-                                <YAxis 
-                                    type="category" 
-                                    dataKey="name" 
-                                    width={120} 
-                                    tick={{ fontSize: 12 }}
-                                />
-                                <Tooltip 
-                                    formatter={(value) => [`$${value}B`, 'Valuation']}
-                                    contentStyle={{ borderRadius: '8px' }}
-                                />
-                                <Legend />
-                                <Bar
-                                    dataKey="valuation"
-                                    name="Valuation"
-                                    // shape={(props) => renderCustomBar({ 
-                                    //     ...props, 
-                                    //     fill: props.payload.isMainCompany ? '#8b5cf6' : '#10b981'
-                                    // })}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
+                    <Bar options={valuationOptions} data={valuationChartData} />
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <h3 className="text-lg font-semibold mb-4">Employee Count</h3>
-                    <div className="h-64">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart
-                                data={chartData}
-                                margin={{ left: 20, right: 20 }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                                <YAxis scale="log" />
-                                <Tooltip />
-                                <Legend />
-                                <Area
-                                    type="monotone"
-                                    dataKey="employees"
-                                    name="Employees"
-                                    // shape={renderCustomArea}
-                                />
-                            </AreaChart>
-                        </ResponsiveContainer>
-                    </div>
+                    <Scatter options={employeeOptions} data={employeeChartData} />
                 </div>
             </div>
 
             {/* Funding Timeline */}
             <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                <h3 className="text-lg font-semibold mb-4">Funding History</h3>
-                <div className="h-80">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={fundingData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip
-                                formatter={(value) => [`$${value}M`, 'Amount']}
-                                labelFormatter={(date) => `Round: ${fundingData.find(d => d.date === date)?.round}`}
-                                contentStyle={{ borderRadius: '8px' }}
-                            />
-                            <Line
-                                type="monotone"
-                                dataKey="amount"
-                                stroke="#ec4899"
-                                strokeWidth={2}
-                                dot={{ r: 4 }}
-                                activeDot={{ r: 6 }}
-                                name="Funding Amount"
-                            />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
+                <Line options={fundingOptions} data={fundingChartData} />
             </div>
         </div>
     );
