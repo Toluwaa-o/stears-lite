@@ -272,12 +272,13 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
                 display: true,
                 text: 'Funding History',
             },
+            // Replace lines 277-280 with:
             tooltip: {
                 callbacks: {
-                    label: (context: any) => {
-                        return `$${context.raw}`;
+                    label: (context: TooltipItem<'line'>) => {
+                        return `$${(context.raw as number).toLocaleString()}`;
                     },
-                    title: (context: any) => {
+                    title: (context: TooltipItem<'line'>[]) => {
                         const item = fundingData[context[0].dataIndex];
                         return `Round: ${item.round}`;
                     }

@@ -7,6 +7,7 @@ import {
     Title,
     Tooltip,
     Legend,
+    TooltipItem
 } from 'chart.js';
 import { Article } from '@/types/Interfaces';
 
@@ -81,8 +82,8 @@ const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
             },
             tooltip: {
                 callbacks: {
-                    label: (context: any) => {
-                        return `Sentiment: ${context.raw.toFixed(2)}`;
+                    label: (context: TooltipItem<'bar'>) => {
+                        return `${(context.raw as number).toFixed(2)}%`;
                     }
                 }
             }
