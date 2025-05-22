@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Open_Sans, Cormorant_Garamond } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "./components/ui/Header";
 import Footer from "./components/ui/Footer";

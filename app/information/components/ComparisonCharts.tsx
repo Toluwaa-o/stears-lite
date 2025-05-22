@@ -1,7 +1,7 @@
 import { Competitors, FundingRound } from '@/types/Interfaces';
 import parseFinancialString from '@/utils/NumberParser';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ScatterController, LogarithmicScale } from 'chart.js';
-import { Bar, Line, Scatter } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend, ScatterController, LogarithmicScale, TooltipItem } from 'chart.js';
+import { Bar, Line } from 'react-chartjs-2';
 
 // Register ChartJS components
 ChartJS.register(
@@ -98,8 +98,8 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             },
             tooltip: {
                 callbacks: {
-                    label: (context: any) => {
-                        return `$${context.raw}`;
+                    label: (context: TooltipItem<'bar'>) => {
+                        return `$${(context.raw as number).toLocaleString()}`;
                     }
                 }
             }
@@ -155,8 +155,8 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             },
             tooltip: {
                 callbacks: {
-                    label: (context: any) => {
-                        return `$${context.raw}`;
+                    label: (context: TooltipItem<'bar'>) => {
+                        return `$${(context.raw as number).toLocaleString()}`;
                     }
                 }
             }
@@ -211,8 +211,8 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             },
             tooltip: {
                 callbacks: {
-                    label: (context: any) => {
-                        return `${context.raw} employees`;
+                    label: (context: TooltipItem<'bar'>) => {
+                        return `$${(context.raw as number).toLocaleString()} employees`;
                     }
                 }
             }
@@ -275,7 +275,7 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             tooltip: {
                 callbacks: {
                     label: (context: any) => {
-                        return `$${context.raw}M`;
+                        return `$${context.raw}`;
                     },
                     title: (context: any) => {
                         const item = fundingData[context[0].dataIndex];

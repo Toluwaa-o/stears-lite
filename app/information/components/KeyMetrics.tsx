@@ -10,7 +10,7 @@ interface KeyMetricsProps {
     companyName: string;
 }
 
-const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competitors, companyName }) => {
+const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competitors }) => {
     const formatKey = (key: string) => {
         return key.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     };
