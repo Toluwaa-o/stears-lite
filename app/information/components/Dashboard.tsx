@@ -31,7 +31,12 @@ const Home: React.FC<CompanyDataProps> = ({ data, employeeCount }) => {
 
                 <div className="mt-8">
                     <h2 className="text-xl font-semibold mb-4">Key Metrics</h2>
-                    <KeyMetrics metrics={data.company_info_fixed} employeeCount={employeeCount} />
+                    <KeyMetrics
+                        metrics={data.company_info_fixed}
+                        employeeCount={employeeCount}
+                        competitors={data.competitors}
+                        companyName={data.company}
+                    />
                 </div>
 
                 <div className="space-y-8">

@@ -1,6 +1,6 @@
 const parseFinancialString = (value: string): number | null => {
     if (!value || typeof value !== "string") return null;
-
+    if (value === 'N/A') return 0
     const cleaned = value.trim().replace(/[\$,]/g, "").replace(/\.$/, "");
 
     const match = cleaned.match(/^([\d.]+)([KMB]?)$/i);

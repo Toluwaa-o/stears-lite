@@ -14,7 +14,7 @@ ChartJS.register(
     Tooltip,
     Legend,
     ScatterController,
-    LogarithmicScale
+    LogarithmicScale,
 );
 
 interface ComparisonChartProps {
@@ -199,7 +199,7 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
 
     // Employee chart options
     const employeeOptions = {
-        indexAxis: 'y' as const, // Horizontal bars
+        indexAxis: 'x' as const, // Horizontal bars
         responsive: true,
         plugins: {
             legend: {
@@ -248,8 +248,8 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
                     ? 'rgb(124, 58, 237)' // Solid purple
                     : 'rgb(34, 211, 238)' // Solid teal
             ),
-            borderWidth: 2,
-            borderRadius: 6,
+            borderWidth: 1,
+            borderRadius: 2,
             borderSkipped: false,
             // Special effect for main company
             hoverBackgroundColor: chartData.map(item =>
@@ -322,7 +322,7 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <Scatter options={employeeOptions} data={employeeChartData} />
+                    <Bar options={employeeOptions} data={employeeChartData} />
                 </div>
             </div>
 

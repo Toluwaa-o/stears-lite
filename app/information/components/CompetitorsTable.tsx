@@ -23,7 +23,8 @@ const CompetitorsTable: React.FC<CompetitorsTableProps> = ({ competitors }) => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Competitor</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employees</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Growth</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Emp. Growth</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Funding</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valuation</th>
                         </tr>
                     </thead>
@@ -40,6 +41,7 @@ const CompetitorsTable: React.FC<CompetitorsTableProps> = ({ competitors }) => {
                                         <span className="text-green-500">{competitors["Employee Growth"][index] || 'N/A'}</span>
                                     )}
                                 </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatValue(competitors['Total Funding'][index])}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatValue(competitors.Valuation[index])}</td>
                             </tr>
                         ))}
