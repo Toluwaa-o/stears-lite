@@ -46,7 +46,6 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
         shadowOffsetY: 2
     };
 
-
     // Prepare data for visualization
     const prepareComparisonData = (): ChartDataItem[] => {
         const mainCompany: ChartDataItem = {
@@ -67,7 +66,6 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             isMainCompany: false,
         })).filter(item => item.revenue !== null);
 
-
         // Sort competitors by revenue (descending)
         const sortedCompetitors = [...competitorsData].sort((a, b) => (b?.revenue || 0) - (a?.revenue || 0));
         return [mainCompany, ...sortedCompetitors];
@@ -83,33 +81,42 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
         investor: companyData.funding?.['Lead Investors']?.[index] || '',
     })).filter(item => item.amount !== null);
 
+    // check if data range spans multiple orders of magnitude for logarithmic scale use
+    const useLogScale = (values: (number | null)[]) => {
+        const filtered = values.filter(v => v !== null && v > 0) as number[];
+        if (filtered.length < 2) return false;
+        const max = Math.max(...filtered);
+        const min = Math.min(...filtered);
+        return max / min >= 100;
+    };
+
+    // Decide scale type for revenue, valuation, employees
+    const revenueValues = chartData.map(item => item.revenue);
+    const valuationValues = chartData.map(item => item.valuation);
+    const employeeValues = chartData.map(item => item.employees);
+
+    const revenueLog = useLogScale(revenueValues);
+    const valuationLog = useLogScale(valuationValues);
+    const employeeLog = useLogScale(employeeValues);
 
     // Revenue chart options
     const revenueOptions = {
         indexAxis: 'y' as const,
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top' as const,
-            },
-            title: {
-                display: true,
-                text: 'Revenue Comparison ($)',
-            },
+            legend: { position: 'top' as const },
+            title: { display: true, text: 'Revenue Comparison ($)' },
             tooltip: {
                 callbacks: {
-                    label: (context: TooltipItem<'bar'>) => {
-                        return `$${(context.raw as number).toLocaleString()}`;
-                    }
+                    label: (context: TooltipItem<'bar'>) => `$${(context.raw as number).toLocaleString()}`
                 }
             }
         },
         scales: {
             x: {
-                title: {
-                    display: true,
-                    text: 'Revenue ($)'
-                }
+                type: revenueLog ? 'logarithmic' as const : 'linear' as const,
+                title: { display: true, text: `Revenue $${revenueLog ? ' (log scale)' : ''}` },
+                min: revenueLog ? 1 : undefined,
             }
         }
     };
@@ -120,19 +127,14 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             label: 'Annual Revenue',
             data: chartData.map(item => item.revenue),
             backgroundColor: chartData.map(item =>
-                item.isMainCompany
-                    ? MAIN_COMPANY_COLOR
-                    : COMPETITOR_COLOR
+                item.isMainCompany ? MAIN_COMPANY_COLOR : COMPETITOR_COLOR
             ),
             borderColor: chartData.map(item =>
-                item.isMainCompany
-                    ? '#5b21b6'  // Darker purple border
-                    : '#0d9488'  // Darker teal border
+                item.isMainCompany ? '#5b21b6' : '#0d9488'
             ),
             borderWidth: 1,
             borderRadius: 2,
             borderSkipped: false,
-            // Add special effects to main company bars
             hoverBackgroundColor: chartData.map(item =>
                 item.isMainCompany ? '#9333ea' : '#06b6d4'
             ),
@@ -140,33 +142,25 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
         }]
     };
 
-
     // Valuation chart options
     const valuationOptions = {
         indexAxis: 'y' as const,
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-            legend: {
-                position: 'top' as const,
-            },
-            title: {
-                display: true,
-                text: 'Valuation Comparison ($)',
-            },
+            legend: { position: 'top' as const },
+            title: { display: true, text: 'Valuation Comparison ($)' },
             tooltip: {
                 callbacks: {
-                    label: (context: TooltipItem<'bar'>) => {
-                        return `$${(context.raw as number).toLocaleString()}`;
-                    }
+                    label: (context: TooltipItem<'bar'>) => `$${(context.raw as number).toLocaleString()}`
                 }
             }
         },
         scales: {
             x: {
-                title: {
-                    display: true,
-                    text: 'Valuation ($B)'
-                }
+                type: valuationLog ? 'logarithmic' as const : 'linear' as const,
+                title: { display: true, text: `Valuation $${valuationLog ? ' (log scale)' : ''}` },
+                min: valuationLog ? 1 : undefined,
             }
         }
     };
@@ -176,10 +170,8 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
         datasets: [{
             label: 'Valuation',
             data: chartData.filter(d => d.valuation !== null && d.valuation !== 0).map(item => item.valuation),
-            backgroundColor: chartData.filter(d => d.valuation !== null).map(item =>
-                item.isMainCompany
-                    ? MAIN_COMPANY_COLOR
-                    : COMPETITOR_COLOR
+            backgroundColor: chartData.filter(d => d.valuation !== null && d.valuation !== 0).map(item =>
+                item.isMainCompany ? MAIN_COMPANY_COLOR : COMPETITOR_COLOR
             ),
             borderColor: chartData.filter(d => d.valuation !== null && d.valuation !== 0).map(item =>
                 item.isMainCompany ? '#5b21b6' : '#0d9488'
@@ -187,51 +179,41 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             borderWidth: 1,
             borderRadius: 2,
             borderSkipped: false,
-            // Add striped pattern to main company bars
-            pattern: chartData.filter(d => d.valuation !== null && d.valuation !== 0).map(item =>
-                item.isMainCompany
-                    ? { shape: 'diagonalRight', spacing: 5, color: 'rgba(255,255,255,0.6)' }
-                    : undefined
-            ),
             ...HIGHLIGHT_EFFECT
         }]
     };
 
     // Employee chart options
     const employeeOptions = {
-        indexAxis: 'x' as const, // Horizontal bars
+        indexAxis: 'y' as const,
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-            legend: {
-                position: 'top' as const,
-            },
-            title: {
-                display: true,
-                text: 'Employee Count Comparison',
-            },
+            legend: { position: 'top' as const },
+            title: { display: true, text: 'Employee Count Comparison' },
             tooltip: {
                 callbacks: {
-                    label: (context: TooltipItem<'bar'>) => {
-                        return `${(context.raw as number).toLocaleString()} employees`;
-                    }
+                    label: (context: TooltipItem<'bar'>) =>
+                        `${(context.raw as number).toLocaleString()} employees`
                 }
             }
         },
         scales: {
             x: {
+                type: employeeLog ? 'logarithmic' as const : 'linear' as const,
                 title: {
                     display: true,
-                    text: 'Number of Employees (log scale)'
-                }
+                    text: `Number of Employees${employeeLog ? ' (log scale)' : ''}`
+                },
+                min: employeeLog ? 1 : undefined
             },
             y: {
-                title: {
-                    display: true,
-                    text: 'Company'
-                }
+                type: 'category' as const,
+                title: { display: true, text: 'Company' }
             }
         }
     };
+
 
     const employeeChartData = {
         labels: chartData.map(item => item.name),
@@ -239,45 +221,30 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             label: 'Employees',
             data: chartData.map(item => item.employees),
             backgroundColor: chartData.map(item =>
-                item.isMainCompany
-                    ? 'rgba(124, 58, 237, 0.8)' // Purple with opacity
-                    : 'rgba(34, 211, 238, 0.6)' // Teal with opacity
+                item.isMainCompany ? 'rgba(124, 58, 237, 0.8)' : 'rgba(34, 211, 238, 0.6)'
             ),
             borderColor: chartData.map(item =>
-                item.isMainCompany
-                    ? 'rgb(124, 58, 237)' // Solid purple
-                    : 'rgb(34, 211, 238)' // Solid teal
+                item.isMainCompany ? 'rgb(124, 58, 237)' : 'rgb(34, 211, 238)'
             ),
             borderWidth: 1,
             borderRadius: 2,
             borderSkipped: false,
-            // Special effect for main company
             hoverBackgroundColor: chartData.map(item =>
-                item.isMainCompany
-                    ? 'rgba(124, 58, 237, 1)' // Full opacity on hover
-                    : 'rgba(34, 211, 238, 0.8)'
+                item.isMainCompany ? 'rgba(124, 58, 237, 1)' : 'rgba(34, 211, 238, 0.8)'
             ),
         }]
     };
 
-
     // Funding timeline options
     const fundingOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-            legend: {
-                position: 'top' as const,
-            },
-            title: {
-                display: true,
-                text: 'Funding History',
-            },
-            // Replace lines 277-280 with:
+            legend: { position: 'top' as const },
+            title: { display: true, text: 'Funding History' },
             tooltip: {
                 callbacks: {
-                    label: (context: TooltipItem<'line'>) => {
-                        return `$${(context.raw as number).toLocaleString()}`;
-                    },
+                    label: (context: TooltipItem<'line'>) => `$${(context.raw as number).toLocaleString()}`,
                     title: (context: TooltipItem<'line'>[]) => {
                         const item = fundingData[context[0].dataIndex];
                         return `Round: ${item.round}`;
@@ -287,76 +254,104 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
         },
         scales: {
             y: {
-                title: {
-                    display: true,
-                    text: 'Amount ($M)'
-                }
+                title: { display: true, text: 'Amount ($M)' }
             }
         }
     };
 
     const fundingChartData = {
         labels: fundingData.map(item => item.date),
-        datasets: [
-            {
-                label: 'Funding Amount',
-                data: fundingData.map(item => item.amount),
-                borderColor: '#ec4899',
-                backgroundColor: '#ec4899',
-                borderWidth: 2,
-                tension: 0.1,
-            }
-        ]
+        datasets: [{
+            label: 'Funding Amount',
+            data: fundingData.map(item => item.amount),
+            borderColor: '#ec4899',
+            backgroundColor: '#ec4899',
+            borderWidth: 2,
+            tension: 0.1,
+        }]
     };
+
+    // Accessibility label helper for charts
+    const getAriaLabel = (title: string) => `Chart showing ${title.toLowerCase()}`;
 
     const hasRevenueData = chartData.some(item => item.revenue !== null);
     const hasValuationData = chartData.some(item => item.valuation !== null);
     const hasEmployeeData = chartData.some(item => item.employees > 0);
     const hasFundingData = fundingData.length > 0;
 
-
     return (
         <div className="space-y-8">
             {/* Revenue Comparison Chart */}
-            {hasRevenueData && (
-                <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <Bar options={revenueOptions} data={revenueChartData} />
-                </div>
+            {parseFinancialString(companyData.company_info_fixed['annual revenue'] || '0') !== 0 && hasRevenueData && (
+                <section aria-label={getAriaLabel('Revenue Comparison')} role="region" tabIndex={0}>
+                    <div className="bg-white p-6 rounded-lg shadow border border-gray-200 grid">
+                        <div className="relative h-[300px] sm:h-[450px] md:h-[600px]"><Bar options={revenueOptions} data={revenueChartData} /></div>
+
+                        <p className="mt-2 text-sm text-gray-600 m-auto">
+                            <span className="inline-block w-4 h-4 mr-2" style={{ backgroundColor: MAIN_COMPANY_COLOR }} aria-hidden="true"></span> Main Company&nbsp;&nbsp;
+                            <span className="inline-block w-4 h-4 mr-2" style={{ backgroundColor: COMPETITOR_COLOR }} aria-hidden="true"></span> Competitors
+                        </p>
+                    </div>
+                </section>
             )}
 
             {/* Valuation vs Employee Count */}
             {(hasValuationData || hasEmployeeData) && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {hasValuationData && (
-                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                            <Bar options={valuationOptions} data={valuationChartData} />
+                <section aria-label="Valuation and Employee Count Comparison" role="region" tabIndex={0} className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {parseFinancialString(companyData.company_info_fixed['current valuation'] || '0') !== 0 && hasValuationData && (
+                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200 grid">
+                            <div className="relative h-[300px] sm:h-[350px] md:h-[400px]"><Bar options={valuationOptions} data={valuationChartData} /></div>
+
+                            <p className="mt-2 text-sm text-gray-600 m-auto">
+                                <span className="inline-block w-4 h-4 mr-2" style={{ backgroundColor: MAIN_COMPANY_COLOR }} aria-hidden="true"></span> Main Company&nbsp;&nbsp;
+                                <span className="inline-block w-4 h-4 mr-2" style={{ backgroundColor: COMPETITOR_COLOR }} aria-hidden="true"></span> Competitors
+                            </p>
                         </div>
                     )}
 
-                    {hasEmployeeData && (
-                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                            <Bar options={employeeOptions} data={employeeChartData} />
+                    {!isNaN(companyData.employeeCount) && hasEmployeeData && (
+                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200 grid">
+                            <div className="relative h-[300px] sm:h-[350px] md:h-[400px]"><Bar options={employeeOptions} data={employeeChartData} /></div>
+
+                            <p className="mt-2 text-sm text-gray-600 m-auto">
+                                <span className="inline-block w-4 h-4 mr-2" style={{ backgroundColor: 'rgba(124, 58, 237, 0.8)' }} aria-hidden="true"></span> Main Company&nbsp;&nbsp;
+                                <span className="inline-block w-4 h-4 mr-2" style={{ backgroundColor: 'rgba(34, 211, 238, 0.6)' }} aria-hidden="true"></span> Competitors
+                            </p>
                         </div>
                     )}
-                </div>
+                </section>
             )}
 
             {/* Funding Timeline */}
-            {hasFundingData && (
-                <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <Line options={fundingOptions} data={fundingChartData} />
-                </div>
+            {parseFinancialString(companyData.company_info_fixed['total funding'] || '0') !== 0 && hasFundingData && (
+                <section aria-label="Funding History Timeline" role="region" tabIndex={0}>
+                    <div className="bg-white p-6 rounded-lg shadow border border-gray-200 grid">
+                        <div className="relative h-[300px] sm:h-[350px] md:h-[400px]"><Line options={fundingOptions} data={fundingChartData} /></div>
+
+                        <p className="mt-2 text-sm text-gray-600 m-auto">
+                            Funding rounds and amounts over time.
+                        </p>
+                    </div>
+                </section>
             )}
 
-            {/* If no data at all, show message */}
-            {!hasRevenueData && !hasValuationData && !hasEmployeeData && !hasFundingData && (
-                <div className="bg-white p-6 rounded-lg shadow border border-gray-200 text-center text-gray-500">
-                    <p>Unfortunately, the publicly available data for this company is limited.</p>
-                </div>
-            )}
+            {
+                (
+                    (parseFinancialString(companyData.company_info_fixed['current valuation'] || '0') === 0
+                        && parseFinancialString(companyData.company_info_fixed['total funding'] || '0') === 0
+                        && parseFinancialString(companyData.company_info_fixed['annual revenue'] || '0') === 0
+                        && isNaN(companyData.employeeCount))
+                    ||
+                    (!hasRevenueData && !hasValuationData && !hasEmployeeData && !hasFundingData)
+                ) && (
+                    <div className="bg-white p-6 rounded-lg shadow border border-gray-200 text-center text-gray-500">
+                        <p>Unfortunately, the publicly available data for this company is limited.</p>
+                    </div>
+                )
+            }
+
         </div>
     );
-
 };
 
 export default ComparisonCharts;
