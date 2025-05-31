@@ -37,9 +37,9 @@ const CompetitorsTable: React.FC<CompetitorsTableProps> = ({ competitors }) => {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {String(competitors["Employee Growth"][index])?.startsWith('-') ? (
                                         <span className="text-red-500">{competitors["Employee Growth"][index]}</span>
-                                    ) : (
-                                        <span className="text-green-500">{competitors["Employee Growth"][index] || 'N/A'}</span>
-                                    )}
+                                    ) : !String(competitors["Employee Growth"][index])?.startsWith('N/A') ? (
+                                        <span className="text-green-500">{competitors["Employee Growth"][index]}</span>
+                                    ) : <span>N/A</span>}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatValue(competitors['Total Funding'][index])}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatValue(competitors.Valuation[index])}</td>

@@ -18,7 +18,7 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, cou
                 <div>
                     <h1 className="text-3xl font-bold">{company}</h1>
                     <p className="text-blue-100 mt-2 max-w-2xl">{description}</p>
-                    <div className="flex items-center mt-4 space-x-4">
+                    <div className="flex flex-wrap md:flex-nowrap items-center mt-4 gap-2 space-x-4 md:gap-[unset]">
                         <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm flex items-center">
                             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
