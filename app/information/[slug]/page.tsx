@@ -10,7 +10,17 @@ async function getCompanyData(slug: string): Promise<CompanyData> {
     }
     const data = await res.json();
     if (data.result) {
-        const second_res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api//${data.result.company}/articles`, { cache: 'no-cache' });
+        const queryParts = [
+            data.result.company,
+            data.result.company_info?.industry,
+            data.result.company_info?.founders,
+            'company'
+        ].filter(Boolean);
+
+        const query = queryParts.join(' ');
+
+        const encodedQuery = encodeURIComponent(query);
+        const second_res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${encodedQuery}/articles`, { cache: 'no-cache' });
         if (!second_res.ok) {
             const errorData = await second_res.json();
             throw new Error(errorData.error || "Something went wrong! Please try again.");

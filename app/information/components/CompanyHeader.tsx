@@ -17,7 +17,8 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, cou
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold">{company}</h1>
-                    <p className="text-blue-100 mt-2 max-w-2xl">{description}</p>
+                    <p className="hiddden md:block text-blue-100 mt-2 max-w-2xl md:max-w-full">{description.length > 500 ? description.slice(0, 498) + '...' : description}</p>
+                    <p className="text-blue-100 mt-2 max-w-2xl md:hidden">{description.length > 150 ? description.slice(0, 147) + '...' : description}</p>
                     <div className="flex flex-wrap md:flex-nowrap items-center mt-4 gap-2 space-x-4 md:gap-[unset]">
                         <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm flex items-center">
                             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -26,7 +27,7 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, cou
                             {country}
                         </span>
                         <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm">
-                            Industry : {company_info_fixed.industry || 'N/A'}
+                            Industry : {company_info?.industry ? company_info.industry : company_info_fixed.industry || 'N/A'}
                         </span>
                         <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm">
                             Founded : {company_info.founded?.split(';')[0] || 'N/A'}

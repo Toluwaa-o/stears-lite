@@ -27,13 +27,6 @@ interface GoogleNewsRSS {
     };
 }
 
-/**
- * Fetches the latest news articles about a company from Google News
- * @param companyName - The name of the company to search for
- * @param limit - Maximum number of articles to return (default: 15)
- * @returns Promise with array of Article objects
- * @throws Error when fetching or parsing fails
- */
 const fetchGoogleNews = async (
     companyName: string,
     limit: number = 25
@@ -42,7 +35,7 @@ const fetchGoogleNews = async (
     const articles: Article[] = [];
 
     try {
-        const rssUrl = `https://news.google.com/rss/search?q=${query}`;
+        const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query + ' company')}`;
         const response = await axios.get(rssUrl);
 
         // Parse XML response with proper typing
