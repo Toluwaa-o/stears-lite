@@ -286,7 +286,7 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             {parseFinancialString(companyData.company_info_fixed['annual revenue'] || '0') !== 0 && hasRevenueData && (
                 <section aria-label={getAriaLabel('Revenue Comparison')} role="region" tabIndex={0}>
                     <div className="bg-white p-6 rounded-lg shadow border border-gray-200 grid">
-                        <div className="relative h-[350px] sm:h-[450px] md:h-[600px]"><Bar options={revenueOptions} data={revenueChartData} /></div>
+                        <div className="relative h-[400px] sm:h-[500px] md:h-[600px]"><Bar options={revenueOptions} data={revenueChartData} /></div>
 
                         <p className="mt-2 text-sm text-gray-600 m-auto">
                             <span className="inline-block w-4 h-4 mr-2" style={{ backgroundColor: MAIN_COMPANY_COLOR }} aria-hidden="true"></span> Main Company&nbsp;&nbsp;
