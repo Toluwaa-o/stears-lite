@@ -41,7 +41,7 @@ export async function GET(
         const res = await fetch(`https://lite-api.onrender.com/information/${slug}`)
         if (res.ok) {
             const data = await res.json()
-            console.log(normalizeCompanyData(data))
+            
             const createdDoc = await Company.create(normalizeCompanyData(data));
 
             return NextResponse.json({ result: createdDoc, success: true }, { status: 200 });
