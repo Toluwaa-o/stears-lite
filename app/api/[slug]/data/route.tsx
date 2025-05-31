@@ -4,13 +4,15 @@ import { NextRequest, NextResponse } from "next/server";
 import Fuse from "fuse.js";
 import { notFound } from "next/navigation";
 
+type Params = Promise<{ slug: string }>;
+
 export async function GET(
     request: NextRequest,
-    context: { params: { slug: string } }
+    { params }: { params: Params }
 ): Promise<NextResponse> {
     await connectDB();
 
-    const { slug } = await context.params;
+    const { slug } = await params;
 
     try {
         // 1. Try regex search first, limit 1
