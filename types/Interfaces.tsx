@@ -37,5 +37,7 @@ export interface CompanyData {
     country: string;
     articles: Article[];
     competitors: Competitors;
-    funding: FundingRound
+    funding: FundingRound;
+    updated_at: Date;
+    created_at: Date;
 }

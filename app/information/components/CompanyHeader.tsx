@@ -8,9 +8,10 @@ interface CompanyHeaderProps {
     company_info_fixed: {
         [key: string]: string;
     };
+    updated_at: Date
 }
 
-const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, country, company_info, company_info_fixed }) => {
+const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, country, company_info, company_info_fixed, updated_at }) => {
     return (
         <div className="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-xl p-6 shadow-lg shadow-black/30 text-white">
             <div className="flex items-center justify-between">
@@ -29,6 +30,9 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, cou
                         </span>
                         <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm">
                             Founded : {company_info.founded?.split(';')[0] || 'N/A'}
+                        </span>
+                        <span className="bg-blue-500/20 px-3 py-1 rounded-full text-sm">
+                            Last updated: {new Date(updated_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                         </span>
                     </div>
                 </div>

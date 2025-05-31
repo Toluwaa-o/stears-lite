@@ -27,6 +27,7 @@ const Home: React.FC<CompanyDataProps> = ({ data, employeeCount }) => {
                     country={data.country}
                     company_info={data.company_info}
                     company_info_fixed={data.company_info_fixed}
+                    updated_at={data.updated_at}
                 />
 
                 <div className="mt-8">

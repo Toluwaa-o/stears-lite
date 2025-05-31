@@ -30,12 +30,12 @@ const FundingRoundSchema = new mongoose.Schema({
 
 const CompanySchema = new mongoose.Schema({
     company: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
     country: { type: String, required: true },
-    company_info_fixed: { type: CompanyInfoFixedSchema, required: true },
-    company_info: { type: mongoose.Schema.Types.Mixed, required: true }, // for dynamic structure
-    competitors: { type: CompetitorDataSchema, required: true },
-    funding: { type: FundingRoundSchema, required: true },
+    company_info_fixed: { type: CompanyInfoFixedSchema },
+    company_info: { type: mongoose.Schema.Types.Mixed },
+    competitors: { type: CompetitorDataSchema },
+    funding: { type: FundingRoundSchema },
     created_at: { type: Date, default: () => new Date(), required: true },
     updated_at: { type: Date, default: () => new Date(), required: true },
 });
