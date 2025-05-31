@@ -26,7 +26,7 @@ export default function RootLayout({
       >
         <Header />
 
-        <main className="w-screen overflow-x-hidden">
+        <main className="w-screen overflow-x-hidden min-h-[80vh] md:min-h-auto">
           {children}
         </main>
         <Footer />
