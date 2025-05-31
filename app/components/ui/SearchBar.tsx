@@ -4,18 +4,11 @@ import { useEffect, useState, FormEvent, useMemo } from "react"
 import { IoMdSearch } from "react-icons/io";
 import { useRouter } from 'next/navigation'
 
-const SearchBar = () => {
+type CompanyNames = string[];
+
+const SearchBar = ({ names }: { names : CompanyNames}) => {
     const router = useRouter()
-    const companyNames = useMemo(() => [
-        "Dangote Group",
-        "MTN Group",
-        "Safaricom",
-        "Jumia",
-        "Interswitch",
-        "Andela",
-        "Paystack",
-        "Opay",
-    ], [])
+    const companyNames = useMemo(() => names.map(n => n), [])
 
     const randomStartingInteger = Math.floor(Math.random() * companyNames.length);
 

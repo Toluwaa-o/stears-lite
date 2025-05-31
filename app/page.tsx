@@ -1,6 +1,51 @@
+import connectDB from "@/lib/mongodb";
 import SearchBar from "./components/ui/SearchBar";
+import Company from "@/models/CompanyData";
+import { Article, CompanyData, Competitors, FundingRound } from "@/types/Interfaces";
 
-export default function Home() {
+export interface CompanyFull {
+  _id: string;
+  __v: number;
+  company: string;
+  company_info_fixed: {
+    [key: string]: string;
+  };
+  company_info: {
+    [key: string]: string;
+  };
+  description: string;
+  country: string;
+  articles: Article[];
+  competitors: Competitors;
+  funding: FundingRound;
+  updated_at: Date;
+  created_at: Date;
+}
+
+async function getAllCompanies(): Promise<CompanyFull[]> {
+  try {
+    await connectDB();
+    const allCompanies = await Company.find({}).lean();
+    return allCompanies as CompanyFull[];
+  } catch (error) {
+    return [
+      { company: "Dangote Group" },
+      { company: "MTN Group" },
+      { company: "Safaricom" },
+      { company: "Jumia" },
+      { company: "Interswitch" },
+      { company: "Andela" },
+      { company: "Paystack" },
+      { company: "Opay" },
+    ] as CompanyFull[];
+  }
+}
+
+
+const Home = async () => {
+  const result = await getAllCompanies()
+  const companyNames = result.map(res => res.company.replace("(company)", ""))
+  
   return (
     <div className="flex flex-col gap-10 px-4 py-12 max-w-4xl mx-auto lg:max-w-6xl xl:max-w-7xl">
       <div className="space-y-4 max-w-2xl">
@@ -14,7 +59,9 @@ export default function Home() {
           </span>
         </p>
       </div>
-      <SearchBar />
+      <SearchBar names={companyNames} />
     </div>
   );
 }
+
+export default Home;
