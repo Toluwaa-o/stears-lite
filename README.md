@@ -1,22 +1,23 @@
 # Stears Lite – Frontend
 
-Stears Lite is a data-driven frontend application that lets users explore macroeconomic trends behind African companies. It allows users to search for a company, then view key metrics such as GDP, inflation, and interest rates from the country it operates in, alongside news insights.
+Stears Lite is a data-driven frontend application that lets users explore detailed company data for African businesses. Users can search for a company and view key metrics such as number of investors, funding rounds, valuation, revenue, employee count, and other vital statistics, alongside relevant news insights.
 
 ## 🔧 Tech Stack
 
 * **Next.js** + **TypeScript**
 * **TailwindCSS** for styling
-* **Radix UI** for accessible components
-* **MUI Charts** for data visualization
+* **chart.js & react-chartjs-2** for data visualization
+* **Next.js** + **TypeScript** + **MongoDB (Mongoose)** backend (internal API)
 * **FastAPI** backend (external API)
 
 ## 🚀 Features
 
 * 🔎 Search for African companies
-* 🌍 Fetch macroeconomic indicators from the World Bank
-* 🧠 Tooltips and trend visualizations for each metric
+* 📊 View key company metrics: investors, funding, valuation, revenue, employee count, etc.
+* 🧠 Tooltips and visualizations for company data trends
 * 📰 Company-specific news with sentiment analysis
-* 📈 Volatility badges and data comparisons with 2020 as the baseline
+* 📈 Performance badges and comparisons against industry benchmarks
+
 
 ## 📦 Setup Instructions
 
@@ -47,4 +48,4 @@ Stears Lite is a data-driven frontend application that lets users explore macroe
 
 ## 🔗 Backend API
 
-This frontend connects to a FastAPI backend. Make sure the backend is running and accessible at the `NEXT_PUBLIC_API_URL`.
+This frontend connects to a FastAPI backend and NextJS backend. Make sure the backend is running and accessible at the `NEXT_PUBLIC_API_URL`.

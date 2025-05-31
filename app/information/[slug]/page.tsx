@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     return {
         title: `${data.company} - Company Insights`,
-        description: `Explore comprehensive data about ${data.company}, including public sentiment, macroeconomic context in ${data.country}, and financial history.`,
+        description: `Explore detailed data about ${data.company}, including funding, valuation, investors, revenue, employee count, and recent news.`,
     };
 }
 

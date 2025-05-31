@@ -8,9 +8,9 @@ export default function Home() {
           Stay Ahead with Smarter African Company Insights
         </h2>
         <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-          Make smarter investment decisions with company data and macro insights — all in one place.
+          Make smarter investment decisions with company data and insights — all in one place.
           <span className="hidden md:inline">
-            {" "}Search any African company to see key news, economic indicators, and curated reports from trusted sources.
+            {" "}Search any African company to see key news, financial data, and curated reports from trusted sources.
           </span>
         </p>
       </div>
