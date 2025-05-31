@@ -53,7 +53,6 @@ const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
         return monthlyData[month].total / monthlyData[month].count;
     });
 
-    console.log("Sentiment scores:", data);
     const minSentiment = Math.min(...data);
     const chartData = {
         labels,
