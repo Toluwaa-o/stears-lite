@@ -18,7 +18,7 @@ const FundingTimeline: React.FC<FundingTimelineProps> = ({ funding }) => {
             </div>
             <div className="p-4">
                 <div className="space-y-4">
-                    {funding.Date.map((date, index) => (
+                    {funding?.Date?.length > 0 ? funding.Date.map((date, index) => (
                         <div key={index} className="flex">
                             <div className="flex flex-col items-center mr-4">
                                 <div className="w-3 h-3 rounded-full bg-blue-500 mt-1"></div>
@@ -39,7 +39,7 @@ const FundingTimeline: React.FC<FundingTimelineProps> = ({ funding }) => {
                                 </div>
                             </div>
                         </div>
-                    ))}
+                    )) : <p className="text-sm text-gray-500 italic px-6 py-4">No funding data available</p>}
                 </div>
             </div>
         </div>

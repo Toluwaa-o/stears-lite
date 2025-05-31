@@ -1,18 +1,29 @@
 import { CompanyData } from "@/types/Interfaces";
-import test_data from "@/data/testData.json"
 import Home from "../components/Dashboard";
 import parseFinancialString from "@/utils/NumberParser";
 
 async function getCompanyData(slug: string): Promise<CompanyData> {
-    console.log(slug)
-    return test_data
-    // const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/information/${slug}`, { cache: 'force-cache' });
-    // if (!res.ok) {
-    //     const errorData = await res.json();
-    //     throw new Error(errorData.error || "Something went wrong! Please try again.");
-    // }
-    // return res.json();
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/data`, { cache: 'force-cache' });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Something went wrong! Please try again.");
+    }
+    const data = await res.json();
+    if (data.result) {
+        const second_res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api//${data.result.company}/articles`, { cache: 'no-cache' });
+        if (!second_res.ok) {
+            const errorData = await second_res.json();
+            throw new Error(errorData.error || "Something went wrong! Please try again.");
+        }
+
+        const second_data = await second_res.json();
+        data.result['articles'] = second_data.articles
+        return data.result;
+    } else {
+        throw new Error("No company found matching your query.");
+    }
 }
+
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params

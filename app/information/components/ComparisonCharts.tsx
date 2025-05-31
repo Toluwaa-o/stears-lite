@@ -51,38 +51,38 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
     const prepareComparisonData = (): ChartDataItem[] => {
         const mainCompany: ChartDataItem = {
             name: companyData.companyName,
-            revenue: parseFinancialString(companyData.company_info_fixed['annual revenue']),
-            valuation: parseFinancialString(companyData.company_info_fixed['current valuation']),
+            revenue: parseFinancialString(companyData.company_info_fixed['annual revenue'] || '0'),
+            valuation: parseFinancialString(companyData.company_info_fixed['current valuation'] || '0'),
             employees: companyData.employeeCount || 0,
-            funding: parseFinancialString(companyData.company_info_fixed['total funding']),
+            funding: parseFinancialString(companyData.company_info_fixed['total funding'] || '0'),
             isMainCompany: true,
         };
 
-        const competitorsData = companyData.competitors['Competitor Name']
-            .map((name, index): ChartDataItem => ({
-                name,
-                revenue: parseFinancialString(companyData.competitors['Revenue'][index]),
-                valuation: parseFinancialString(companyData.competitors['Valuation'][index]),
-                employees: parseInt(companyData.competitors['Number of Employees'][index] || '0'),
-                funding: parseFinancialString(companyData.competitors['Total Funding'][index]),
-                isMainCompany: false,
-            }))
-            .filter(item => item.revenue !== null) as ChartDataItem[];
+        const competitorsData = (companyData.competitors?.['Competitor Name'] || []).map((name, index): ChartDataItem => ({
+            name,
+            revenue: parseFinancialString(companyData.competitors?.['Revenue']?.[index] || '0'),
+            valuation: parseFinancialString(companyData.competitors?.['Valuation']?.[index] || '0'),
+            employees: parseInt(companyData.competitors?.['Number of Employees']?.[index] || '0'),
+            funding: parseFinancialString(companyData.competitors?.['Total Funding']?.[index] || '0'),
+            isMainCompany: false,
+        })).filter(item => item.revenue !== null);
+
 
         // Sort competitors by revenue (descending)
-        const sortedCompetitors = [...competitorsData].sort((a, b) => (b.revenue || 0) - (a.revenue || 0));
+        const sortedCompetitors = [...competitorsData].sort((a, b) => (b?.revenue || 0) - (a?.revenue || 0));
         return [mainCompany, ...sortedCompetitors];
     };
 
     const chartData = prepareComparisonData();
 
     // Funding timeline data preparation
-    const fundingData = companyData.funding.Date.map((date, index) => ({
+    const fundingData = (companyData.funding?.Date || []).map((date, index) => ({
         date,
-        amount: parseFinancialString(companyData.funding.Amount[index]),
-        round: companyData.funding.Round[index],
-        investor: companyData.funding['Lead Investors'][index],
+        amount: parseFinancialString(companyData.funding?.Amount?.[index] || ''),
+        round: companyData.funding?.Round?.[index] || '',
+        investor: companyData.funding?.['Lead Investors']?.[index] || '',
     })).filter(item => item.amount !== null);
+
 
     // Revenue chart options
     const revenueOptions = {
@@ -172,23 +172,23 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
     };
 
     const valuationChartData = {
-        labels: chartData.filter(d => d.valuation !== null).map(item => item.name),
+        labels: chartData.filter(d => d.valuation !== null && d.valuation !== 0).map(item => item.name),
         datasets: [{
             label: 'Valuation',
-            data: chartData.filter(d => d.valuation !== null).map(item => item.valuation),
+            data: chartData.filter(d => d.valuation !== null && d.valuation !== 0).map(item => item.valuation),
             backgroundColor: chartData.filter(d => d.valuation !== null).map(item =>
                 item.isMainCompany
                     ? MAIN_COMPANY_COLOR
                     : COMPETITOR_COLOR
             ),
-            borderColor: chartData.filter(d => d.valuation !== null).map(item =>
+            borderColor: chartData.filter(d => d.valuation !== null && d.valuation !== 0).map(item =>
                 item.isMainCompany ? '#5b21b6' : '#0d9488'
             ),
             borderWidth: 1,
             borderRadius: 2,
             borderSkipped: false,
             // Add striped pattern to main company bars
-            pattern: chartData.filter(d => d.valuation !== null).map(item =>
+            pattern: chartData.filter(d => d.valuation !== null && d.valuation !== 0).map(item =>
                 item.isMainCompany
                     ? { shape: 'diagonalRight', spacing: 5, color: 'rgba(255,255,255,0.6)' }
                     : undefined
@@ -212,7 +212,7 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
             tooltip: {
                 callbacks: {
                     label: (context: TooltipItem<'bar'>) => {
-                        return `$${(context.raw as number).toLocaleString()} employees`;
+                        return `${(context.raw as number).toLocaleString()} employees`;
                     }
                 }
             }
@@ -309,30 +309,54 @@ const ComparisonCharts = ({ companyData }: ComparisonChartProps) => {
         ]
     };
 
+    const hasRevenueData = chartData.some(item => item.revenue !== null);
+    const hasValuationData = chartData.some(item => item.valuation !== null);
+    const hasEmployeeData = chartData.some(item => item.employees > 0);
+    const hasFundingData = fundingData.length > 0;
+
+
     return (
         <div className="space-y-8">
             {/* Revenue Comparison Chart */}
-            <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                <Bar options={revenueOptions} data={revenueChartData} />
-            </div>
+            {hasRevenueData && (
+                <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+                    <Bar options={revenueOptions} data={revenueChartData} />
+                </div>
+            )}
 
             {/* Valuation vs Employee Count */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <Bar options={valuationOptions} data={valuationChartData} />
-                </div>
+            {(hasValuationData || hasEmployeeData) && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {hasValuationData && (
+                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+                            <Bar options={valuationOptions} data={valuationChartData} />
+                        </div>
+                    )}
 
-                <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                    <Bar options={employeeOptions} data={employeeChartData} />
+                    {hasEmployeeData && (
+                        <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+                            <Bar options={employeeOptions} data={employeeChartData} />
+                        </div>
+                    )}
                 </div>
-            </div>
+            )}
 
             {/* Funding Timeline */}
-            <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
-                <Line options={fundingOptions} data={fundingChartData} />
-            </div>
+            {hasFundingData && (
+                <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
+                    <Line options={fundingOptions} data={fundingChartData} />
+                </div>
+            )}
+
+            {/* If no data at all, show message */}
+            {!hasRevenueData && !hasValuationData && !hasEmployeeData && !hasFundingData && (
+                <div className="bg-white p-6 rounded-lg shadow border border-gray-200 text-center text-gray-500">
+                    <p>Unfortunately, the publicly available data for this company is limited.</p>
+                </div>
+            )}
         </div>
     );
+
 };
 
 export default ComparisonCharts;

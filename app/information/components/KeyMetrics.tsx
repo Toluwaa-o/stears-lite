@@ -17,7 +17,7 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
 
     const formatValue = (value: string | undefined) => {
         if (!value) return 'N/A';
-        if (value.startsWith('$')) return value;
+        if (String(value).startsWith('$')) return value;
         return value;
     };
 
@@ -85,8 +85,8 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
                 <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500">Competitor Comparison</span>
                     <span className={`text-xs font-medium ${comparison.isAboveAvg
-                            ? 'text-emerald-600 dark:text-emerald-400'
-                            : 'text-rose-600 dark:text-rose-400'
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : 'text-rose-600 dark:text-rose-400'
                         }`}>
                         {comparison.percentile.toFixed(0)}% Percentile
                     </span>
@@ -96,8 +96,8 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
                     <div className="flex h-1.5 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
                         <div
                             className={`flex-1 rounded-full ${comparison.isAboveAvg
-                                    ? 'bg-emerald-500/80 dark:bg-emerald-400/80'
-                                    : 'bg-rose-500/80 dark:bg-rose-400/80'
+                                ? 'bg-emerald-500/80 dark:bg-emerald-400/80'
+                                : 'bg-rose-500/80 dark:bg-rose-400/80'
                                 }`}
                             style={{ width: `${comparison.percentile}%` }}
                         />
@@ -142,21 +142,24 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
             {importantMetrics.map((metricKey) => {
                 const isGrowthMetric = metricKey === 'employee count';
                 const growthValue = metrics[metricKey];
-                const isPositiveGrowth = !growthValue?.startsWith('-');
+                const valueIsNumeric = !isNaN(Number(String(growthValue).replace(/[-%]/g, '')));
+                const isPositiveGrowth = !String(growthValue).trim().startsWith('-');
 
                 return (
                     <div key={metricKey} className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
-                        <h3 className="text-gray-600 text-sm font-medium">{formatKey(metricKey)}</h3>
+                        <h3 className="text-gray-600 text-sm font-medium">{formatKey(metricKey) == 'Employee Count' ? 'Employees' : formatKey(metricKey)}</h3>
 
                         <div className="flex items-center mt-1">
                             <p className="text-2xl font-bold mr-3 text-gray-900">
                                 {metricKey === 'employee count'
-                                    ? employeeCount.toLocaleString()
-                                    : formatValue(metrics[metricKey])
-                                }
+                                    ? valueIsNumeric
+                                        ? employeeCount.toLocaleString()
+                                        : 'N/A'
+                                    : formatValue(metrics[metricKey])}
                             </p>
 
-                            {isGrowthMetric && growthValue && (
+
+                            {valueIsNumeric && isGrowthMetric && growthValue && (
                                 <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isPositiveGrowth
                                     ? 'bg-green-100 text-green-800'
                                     : 'bg-red-100 text-red-800'
@@ -175,7 +178,7 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
                             )}
                         </div>
 
-                        {isGrowthMetric && (
+                        {valueIsNumeric && isGrowthMetric && (
                             <span className={`text-xs mt-1 block ${isPositiveGrowth ? 'text-green-600' : 'text-red-600'
                                 }`}>
                                 {isPositiveGrowth ? 'Increased' : 'Decreased'} from previous year

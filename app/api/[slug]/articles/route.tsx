@@ -8,13 +8,8 @@ export async function GET(
 ): Promise<NextResponse> {
   await connectDB;
 
-  // Access params from context
-  const { slug } = context.params;
-  console.log(slug);
+  const { slug } = await context.params;
 
-  // Use request for something meaningful
-  const headers = request.headers;
-  console.log(headers)
-  const articles = await fetchGoogleNews('opay');
+  const articles = await fetchGoogleNews(slug);
   return NextResponse.json({ articles, success: true }, { status: 200 });
 };

@@ -36,7 +36,7 @@ interface GoogleNewsRSS {
  */
 const fetchGoogleNews = async (
     companyName: string,
-    limit: number = 15
+    limit: number = 25
 ): Promise<Article[]> => {
     const query = companyName.replace(/\s+/g, '+');
     const articles: Article[] = [];

@@ -63,7 +63,7 @@ const Home: React.FC<CompanyDataProps> = ({ data, employeeCount }) => {
 
                     {/* Content Area */}
                     {isChartSection ? (
-                        <ComparisonCharts companyData={{ company_info_fixed: data.company_info_fixed, competitors: data.competitors, funding: data.funding, companyName: data.company, employeeCount: employeeCount }} />
+                        <ComparisonCharts companyData={{ company_info_fixed: data.company_info_fixed, competitors: data.competitors || [], funding: data.funding || [], companyName: data.company, employeeCount: employeeCount }} />
                     ) : (
                         <div className="mt-2 grid grid-cols-1 lg:grid-cols-3 gap-6">
                             <div className="lg:col-span-2 space-y-6">

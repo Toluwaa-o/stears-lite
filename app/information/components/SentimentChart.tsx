@@ -53,6 +53,8 @@ const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
         return monthlyData[month].total / monthlyData[month].count;
     });
 
+    console.log("Sentiment scores:", data);
+    const minSentiment = Math.min(...data);
     const chartData = {
         labels,
         datasets: [
@@ -60,13 +62,11 @@ const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
                 label: 'Average Sentiment Score',
                 data,
                 backgroundColor: data.map(score => {
-                    if (score > 0.6) return '#10B981'; // green
-                    if (score > 0.3) return '#3B82F6'; // blue
+                    if (score > 0.01) return '#10B981'; // green
                     return '#6B7280'; // gray
                 }),
                 borderColor: data.map(score => {
-                    if (score > 0.6) return '#059669'; // darker green
-                    if (score > 0.3) return '#2563EB'; // darker blue
+                    if (score > 0.01) return '#059669'; // darker green
                     return '#4B5563'; // darker gray
                 }),
                 borderWidth: 1,
@@ -90,7 +90,7 @@ const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
         },
         scales: {
             y: {
-                min: 0,
+                min: Math.floor(minSentiment * 10) / 10,
                 max: 1,
             },
         },

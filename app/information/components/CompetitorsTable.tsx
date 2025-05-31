@@ -17,7 +17,7 @@ const CompetitorsTable: React.FC<CompetitorsTableProps> = ({ competitors }) => {
                 <h2 className="font-semibold text-lg">Competitors Comparison</h2>
             </div>
             <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
+                {competitors["Competitor Name"] && competitors["Competitor Name"].length ? <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Competitor</th>
@@ -35,7 +35,7 @@ const CompetitorsTable: React.FC<CompetitorsTableProps> = ({ competitors }) => {
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatValue(competitors.Revenue[index])}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatValue(competitors["Number of Employees"][index])}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {competitors["Employee Growth"][index]?.startsWith('-') ? (
+                                    {String(competitors["Employee Growth"][index])?.startsWith('-') ? (
                                         <span className="text-red-500">{competitors["Employee Growth"][index]}</span>
                                     ) : (
                                         <span className="text-green-500">{competitors["Employee Growth"][index] || 'N/A'}</span>
@@ -46,7 +46,8 @@ const CompetitorsTable: React.FC<CompetitorsTableProps> = ({ competitors }) => {
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                </table> : <p className="text-sm text-gray-500 italic px-6 py-4">No competitors data available</p>
+                }
             </div>
         </div>
     );

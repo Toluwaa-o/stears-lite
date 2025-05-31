@@ -23,7 +23,7 @@ const ArticlesFeed: React.FC<ArticlesFeedProps> = ({ articles }) => {
                 <h2 className="font-semibold text-lg">Recent News & Articles</h2>
             </div>
             <div className="divide-y divide-gray-100">
-                {articles.slice(0, 5).map((article) => (
+                {articles.slice(0, 6).map((article) => (
                     <a
                         key={article.id}
                         href={article.link}
@@ -40,22 +40,22 @@ const ArticlesFeed: React.FC<ArticlesFeedProps> = ({ articles }) => {
                                     <span>{formatDate(article.published)}</span>
                                 </div>
                             </div>
-                            {article.sentiment_score > 0 && (
+                            {/* {article.sentiment_score > 0 && (
                                 <span className={`text-xs px-2 py-1 rounded-full ${getSentimentColor(article.sentiment_score)}`}>
                                     {article.sentiment_score.toFixed(2)}
                                 </span>
-                            )}
+                            )} */}
                         </div>
                     </a>
                 ))}
             </div>
-            {articles.length > 5 && (
+            {/* {articles.length > 5 && (
                 <div className="p-4 text-center border-t border-gray-100">
                     <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
                         View all {articles.length} articles
                     </button>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };
