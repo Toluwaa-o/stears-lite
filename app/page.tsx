@@ -44,7 +44,7 @@ async function getAllCompanies(): Promise<CompanyFull[]> {
 
 const Home = async () => {
   const result = await getAllCompanies()
-  const companyNames = result.map(res => res.company.replace("(company)", ""))
+  const companyNames = result.map(res => res.company.replace("(company)", "").trim())
   
   return (
     <div className="flex flex-col gap-10 px-4 py-12 max-w-4xl mx-auto lg:max-w-6xl xl:max-w-7xl">
