@@ -9,6 +9,7 @@ const messages = [
     'Organizing data...',
     'Visualizing the data...',
     'Almost done...',
+    'This might take a while...'
 ];
 
 interface Prop {
