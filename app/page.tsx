@@ -28,7 +28,7 @@ async function getAllCompanies(): Promise<CompanyFull[]> {
     const allCompanies = await Company.find({}).lean();
     return allCompanies as CompanyFull[];
   } catch (error) {
-    print(error)
+    console.log(error)
     return [
       { company: "Dangote Group" },
       { company: "MTN Group" },
