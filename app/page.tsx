@@ -1,7 +1,7 @@
 import connectDB from "@/lib/mongodb";
 import SearchBar from "./components/ui/SearchBar";
 import Company from "@/models/CompanyData";
-import { Article, CompanyData, Competitors, FundingRound } from "@/types/Interfaces";
+import { Article, Competitors, FundingRound } from "@/types/Interfaces";
 
 export interface CompanyFull {
   _id: string;
@@ -28,6 +28,7 @@ async function getAllCompanies(): Promise<CompanyFull[]> {
     const allCompanies = await Company.find({}).lean();
     return allCompanies as CompanyFull[];
   } catch (error) {
+    print(error)
     return [
       { company: "Dangote Group" },
       { company: "MTN Group" },
