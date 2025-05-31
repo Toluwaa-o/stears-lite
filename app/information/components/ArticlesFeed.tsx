@@ -10,13 +10,6 @@ const ArticlesFeed: React.FC<ArticlesFeedProps> = ({ articles }) => {
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     };
 
-    const getSentimentColor = (score: number) => {
-        if (score > 0.6) return 'bg-green-100 text-green-800';
-        if (score > 0.3) return 'bg-blue-100 text-blue-800';
-        if (score > 0) return 'bg-gray-100 text-gray-800';
-        return 'bg-gray-100 text-gray-800';
-    };
-
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-4 border-b border-gray-100">
