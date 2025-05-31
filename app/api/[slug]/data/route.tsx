@@ -3,6 +3,7 @@ import Company from "@/models/CompanyData";
 import { NextRequest, NextResponse } from "next/server";
 import Fuse from "fuse.js";
 import { notFound } from "next/navigation";
+import normalizeCompanyData from "@/utils/NormaliseData";
 
 type Params = Promise<{ slug: string }>;
 
@@ -40,8 +41,7 @@ export async function GET(
         const res = await fetch(`https://lite-api.onrender.com/information/${slug}`)
         if (res.ok) {
             const data = await res.json()
-            console.log(data)
-            const createdDoc = await Company.create(data);
+            const createdDoc = await Company.create(normalizeCompanyData(data));
 
             return NextResponse.json({ result: createdDoc, success: true }, { status: 200 });
         }
