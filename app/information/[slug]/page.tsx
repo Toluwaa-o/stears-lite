@@ -1,56 +1,67 @@
 import { CompanyData } from "@/types/Interfaces";
 import Home from "../components/Dashboard";
 import parseFinancialString from "@/utils/NumberParser";
-import Company from "@/models/CompanyData";
-import normalizeCompanyData from "@/utils/NormaliseData";
 import { notFound } from "next/navigation";
-import connectDB from "@/lib/mongodb";
 
-async function getCompanyData(slug: string): Promise<CompanyData> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/data`, { cache: 'force-cache' });
+async function fetchWithErrorHandling(url: string, options?: RequestInit) {
+    const res = await fetch(url, options);
     if (!res.ok) {
-        const errorData = await res.json();
+        let errorData;
+        try {
+            errorData = await res.json();
+        } catch {
+            throw new Error("Failed to parse error response");
+        }
         throw new Error(errorData.error || "Something went wrong! Please try again.");
     }
+    return res.json();
+}
 
-    let data = await res.json();
-    console.log(data.result)
-    if (data.result.length < 1) {
-        console.log("entering webscrapping section")
-        const res = await fetch(`https://lite-api.onrender.com/information/${slug}`)
-        if (res.ok) {
-            const result = await res.json()
-            await connectDB();
-            const createdDoc = await Company.create(normalizeCompanyData(result));
+async function getCompanyData(slug: string): Promise<CompanyData> {
+    try {
+        let data = await fetchWithErrorHandling(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/data`,
+            { cache: 'force-cache' }
+        );
 
-            data = createdDoc
-        } else {
-            return notFound()
+        if (!data.result || data.result.length < 1) {
+            console.log("No data found, entering webscraping section");
+            data = await fetchWithErrorHandling(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/scrapper`,
+                { cache: 'force-cache' }
+            );
+
+            if (!data.result || data.result.length < 1) {
+                return notFound();
+            }
         }
-    }
 
-    if (data.result) {
+        const companyInformation = data.result;
+        console.log(companyInformation);
+
         const queryParts = [
-            data.result.company,
-            data.result.company_info?.industry,
-            data.result.company_info?.founders,
+            companyInformation.company,
+            companyInformation.company_info?.industry,
+            companyInformation.company_info?.founders,
             'company'
         ].filter(Boolean);
 
         const query = queryParts.join(' ');
-
         const encodedQuery = encodeURIComponent(query);
-        const second_res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${encodedQuery}/articles`, { cache: 'no-cache' });
-        if (!second_res.ok) {
-            const errorData = await second_res.json();
-            throw new Error(errorData.error || "Something went wrong! Please try again.");
-        }
 
-        const second_data = await second_res.json();
-        data.result['articles'] = second_data.articles
-        return data.result;
-    } else {
-        throw new Error("No company found matching your query.");
+        const articlesData = await fetchWithErrorHandling(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${encodedQuery}/articles`,
+            { cache: 'no-cache' }
+        );
+
+        return {
+            ...companyInformation,
+            articles: articlesData.articles || []
+        };
+
+    } catch (error) {
+        console.error("Error in getCompanyData:", error);
+        throw new Error(error instanceof Error ? error.message : "Failed to fetch company data");
     }
 }
 
