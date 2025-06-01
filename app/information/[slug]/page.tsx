@@ -4,6 +4,7 @@ import parseFinancialString from "@/utils/NumberParser";
 import Company from "@/models/CompanyData";
 import normalizeCompanyData from "@/utils/NormaliseData";
 import { notFound } from "next/navigation";
+import connectDB from "@/lib/mongodb";
 
 async function getCompanyData(slug: string): Promise<CompanyData> {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/data`, { cache: 'force-cache' });
@@ -18,7 +19,7 @@ async function getCompanyData(slug: string): Promise<CompanyData> {
         const res = await fetch(`https://lite-api.onrender.com/information/${slug}`)
         if (res.ok) {
             const result = await res.json()
-
+            await connectDB();
             const createdDoc = await Company.create(normalizeCompanyData(result));
 
             data = createdDoc
