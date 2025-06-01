@@ -14,8 +14,9 @@ async function getCompanyData(slug: string): Promise<CompanyData> {
     }
 
     let data = await res.json();
-
+    console.log(data.result)
     if (data.result.length < 1) {
+        console.log("entering webscrapping section")
         const res = await fetch(`https://lite-api.onrender.com/information/${slug}`)
         if (res.ok) {
             const result = await res.json()
