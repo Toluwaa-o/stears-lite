@@ -2,7 +2,6 @@ import connectDB from "@/lib/mongodb";
 import Company from "@/models/CompanyData";
 import { NextRequest, NextResponse } from "next/server";
 import Fuse from "fuse.js";
-import { notFound } from "next/navigation";
 import normalizeCompanyData from "@/utils/NormaliseData";
 import { enqueueCompanyJob } from "@/lib/queue";  // <--- import your queue instance
 
