@@ -1,6 +1,9 @@
 import { CompanyData } from "@/types/Interfaces";
 import Home from "../components/Dashboard";
 import parseFinancialString from "@/utils/NumberParser";
+import Company from "@/models/CompanyData";
+import normalizeCompanyData from "@/utils/NormaliseData";
+import { notFound } from "next/navigation";
 
 async function getCompanyData(slug: string): Promise<CompanyData> {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/data`, { cache: 'force-cache' });
@@ -8,7 +11,22 @@ async function getCompanyData(slug: string): Promise<CompanyData> {
         const errorData = await res.json();
         throw new Error(errorData.error || "Something went wrong! Please try again.");
     }
-    const data = await res.json();
+
+    let data = await res.json();
+
+    if (data.result.length < 1) {
+        const res = await fetch(`https://lite-api.onrender.com/information/${slug}`)
+        if (res.ok) {
+            const result = await res.json()
+
+            const createdDoc = await Company.create(normalizeCompanyData(result));
+
+            data = createdDoc
+        } else {
+            return notFound()
+        }
+    }
+
     if (data.result) {
         const queryParts = [
             data.result.company,
