@@ -1,8 +1,8 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import { dequeueCompanyJob } from "@/lib/queue";
 import connectDB from "@/lib/mongodb";
 import Company from "@/models/CompanyData";
 import normalizeCompanyData from "@/utils/NormaliseData";
+import { NextRequest, NextResponse } from "next/server";
 
 async function fetchCompanyData(slug: string) {
     const res = await fetch(`https://lite-api.onrender.com/information/${slug}`);
@@ -10,22 +10,22 @@ async function fetchCompanyData(slug: string) {
     return res.json();
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function GET(request: NextRequest): Promise<NextResponse> {
     try {
         await connectDB();
 
         const slug = await dequeueCompanyJob();
         if (!slug) {
-            return res.status(200).json({ message: "No jobs in queue" });
+            return NextResponse.json({ message: "No jobs in queue" }, { status: 200 });
         }
 
         const data = await fetchCompanyData(slug);
         const normalized = normalizeCompanyData(data);
         const createdDoc = await Company.create(normalized);
 
-        return res.status(200).json({ message: "Job processed", slug, company: createdDoc });
+        return NextResponse.json({ message: "Job processed", slug, company: createdDoc }, { status: 200 });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Job processing failed" });
+        return NextResponse.json({ error: "Job processing failed" }, { status: 500 });
     }
 }
