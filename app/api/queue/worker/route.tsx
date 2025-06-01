@@ -2,7 +2,7 @@ import { dequeueCompanyJob } from "@/lib/queue";
 import connectDB from "@/lib/mongodb";
 import Company from "@/models/CompanyData";
 import normalizeCompanyData from "@/utils/NormaliseData";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 async function fetchCompanyData(slug: string) {
     const res = await fetch(`https://lite-api.onrender.com/information/${slug}`);
@@ -10,7 +10,7 @@ async function fetchCompanyData(slug: string) {
     return res.json();
 }
 
-export default async function GET(request: NextRequest): Promise<NextResponse> {
+export default async function GET(): Promise<NextResponse> {
     try {
         await connectDB();
 
