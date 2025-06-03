@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { RiSearchEyeLine } from "react-icons/ri";
 import { usePathname } from "next/navigation";
@@ -15,12 +14,6 @@ const playfair = Playfair_Display({
 
 export default function Header() {
     const pathname = usePathname();
-
-    useEffect(() => {
-        fetch("https://lite-api.onrender.com/").catch(() => {
-            // warm up render backend
-        });
-    }, []);
 
     const isHome = pathname === "/";
     const isSource = pathname === '/sources'
