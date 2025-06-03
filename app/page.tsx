@@ -22,8 +22,19 @@ export interface CompanyFull {
   created_at: Date;
 }
 
+async function warmUpRender() {
+  try {
+    await fetch("https://lite-api.onrender.com/", { cache: "no-store" });
+    console.log("Render backend warmed up.");
+  } catch (e) {
+    console.log("Warm-up failed:", e);
+  }
+}
+
+
 async function getAllCompanies(): Promise<CompanyFull[]> {
   try {
+    await warmUpRender();
     await connectDB();
     const allCompanies = await Company.find({}).lean();
     return allCompanies as CompanyFull[];
@@ -46,7 +57,7 @@ async function getAllCompanies(): Promise<CompanyFull[]> {
 const Home = async () => {
   const result = await getAllCompanies()
   const companyNames = result.map(res => res.company.replace("(company)", "").trim())
-  
+
   return (
     <div className="flex flex-col gap-10 px-4 py-12 max-w-4xl mx-auto lg:max-w-6xl xl:max-w-7xl">
       <div className="space-y-4 max-w-2xl">

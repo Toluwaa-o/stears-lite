@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { RiSearchEyeLine } from 'react-icons/ri';
 
-const messages = [
+const scrappingMessages = [
     'Scraping the web...',
     'Gathering data...',
     'Organizing data...',
@@ -12,17 +12,33 @@ const messages = [
     'This might take a while...'
 ];
 
+const loadingMessages = [
+    "Warming up our servers...",
+    'This might take a while...',
+    'Almost done...'
+];
+
 interface Prop {
     scrapingPage: boolean
 }
 
 const LoadingPageLayout = ({ scrapingPage }: Prop) => {
-    const [step, setStep] = useState(0);
+    const [stepScrapping, setStepScrapping] = useState(0);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setStep((prev) => (prev < messages.length - 1 ? prev + 1 : prev));
+            setStepScrapping((prev) => (prev < scrappingMessages.length - 1 ? prev + 1 : prev));
         }, 5000); // 5 seconds per step
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const [stepLoading, setStepLoading] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setStepLoading((prev) => (prev < loadingMessages.length - 1 ? prev + 1 : prev));
+        }, 10000); // 10 seconds per step
 
         return () => clearInterval(interval);
     }, []);
@@ -43,10 +59,16 @@ const LoadingPageLayout = ({ scrapingPage }: Prop) => {
                 </div>
             </div>
 
-            {scrapingPage && (
+            {scrapingPage ? (
                 <div className="max-w-md text-center space-y-4">
                     <p className="text-lg font-medium text-gray-700">
-                        {messages[step]}
+                        {scrappingMessages[stepScrapping]}
+                    </p>
+                </div>
+            ) : (
+                <div className="max-w-md text-center space-y-4">
+                    <p className="text-lg font-medium text-gray-700">
+                        {loadingMessages[stepLoading]}
                     </p>
                 </div>
             )}
