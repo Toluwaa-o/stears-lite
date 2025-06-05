@@ -8,8 +8,8 @@ const scrappingMessages = [
     'Gathering data...',
     'Organizing data...',
     'Visualizing the data...',
+    'This might take a while...',
     'Almost done...',
-    'This might take a while...'
 ];
 
 const loadingMessages = [

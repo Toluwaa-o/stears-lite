@@ -36,7 +36,8 @@ export async function GET(
             return NextResponse.json({ result: fuseResults[0].item, success: true }, { status: 200 });
         }
 
-        return NextResponse.json({ result: [] }, { status: 200 })
+        const data = { "company": slug }
+        return NextResponse.json({ result: data }, { status: 200 })
     } catch (error) {
         console.error("Search error:", error);
         return NextResponse.json({ success: false, error: "Search failed" }, { status: 500 });

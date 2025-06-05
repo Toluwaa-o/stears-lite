@@ -1,7 +1,5 @@
 import { CompanyData } from "@/types/Interfaces";
 import Home from "../components/Dashboard";
-import parseFinancialString from "@/utils/NumberParser";
-import { notFound } from "next/navigation";
 
 async function fetchWithErrorHandling(url: string, options?: RequestInit) {
     const res = await fetch(url, options);
@@ -14,6 +12,7 @@ async function fetchWithErrorHandling(url: string, options?: RequestInit) {
         }
         throw new Error(errorData.error || "Something went wrong! Please try again.");
     }
+
     return res.json();
 }
 
@@ -21,23 +20,10 @@ async function getCompanyData(slug: string): Promise<CompanyData> {
     try {
         let data = await fetchWithErrorHandling(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/data`,
-            { cache: 'force-cache' }
+            { cache: 'no-cache' }
         );
 
-        if (!data.result || data.result.length < 1) {
-            console.log("No data found, entering webscraping section");
-            data = await fetchWithErrorHandling(
-                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/scrapper`,
-                { cache: 'force-cache' }
-            );
-
-            if (!data.result || data.result.length < 1) {
-                return notFound();
-            }
-        }
-
-        const companyInformation = data.result;
-        console.log(companyInformation);
+        const companyInformation = data.result
 
         const queryParts = [
             companyInformation.company,
@@ -80,13 +66,8 @@ const page = async ({ params, }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params
     const data = await getCompanyData(slug);
 
-    // const { articles, company, description, country, company_info, company_info_fixed, funding, competitors } = data;
-    const totalRevenue = parseFinancialString(data.company_info_fixed["annual revenue"]) || 0
-    const revenuePerEmployee = parseFinancialString(data.company_info_fixed["revenue per employee"]) || 0
-    const employee_count = totalRevenue / revenuePerEmployee
-
     return (
-        <Home data={data} employeeCount={Math.round(employee_count)} />
+        <Home data={data} />
     );
 };
 

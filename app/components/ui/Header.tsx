@@ -19,7 +19,7 @@ export default function Header() {
     const isSource = pathname === '/sources'
 
     return (
-        <header className="w-full px-6 py-4 border-b border-gray-800 bg-gray-50 text-black sticky top-0 z-50 flex items-center justify-between">
+        <header className="w-full px-6 py-4 border-b border-gray-300 bg-gray-50 text-black sticky top-0 z-50 flex items-center justify-between">
             <div className="flex items-center gap-2">
                 <RiSearchEyeLine size={26} className="text-black" />
                 <Link
@@ -30,11 +30,11 @@ export default function Header() {
                 </Link>
             </div>
 
-            <nav className="flex items-center gap-4">
+            <nav className="flex items-center gap-3 text-sm font-medium text-gray-700">
                 {!isSource && (
                     <Link
                         href="/sources"
-                        className="text-sm text-gray-800 hover:text-black underline-offset-4 hover:underline transition-colors duration-200"
+                        className="hover:text-black underline underline-offset-4 hover:underline transition-colors duration-200"
                     >
                         Sources
                     </Link>
@@ -43,14 +43,14 @@ export default function Header() {
                 {!isHome && (
                     <Link
                         href="/"
-                        className="hidden md:inline-flex items-center text-gray-800 hover:text-black transition-colors duration-200"
+                        className="inline-flex items-center justify-center p-1.5 hover:bg-gray-200 rounded-md transition-colors duration-200"
+                        title="Home"
                     >
-                        <AiOutlineHome className="w-5 h-5" />
+                        <AiOutlineHome className="w-5 h-5 text-gray-700" />
                     </Link>
                 )}
             </nav>
-
-
         </header>
+
     );
 }

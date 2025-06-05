@@ -25,7 +25,6 @@ export interface CompanyFull {
 async function warmUpRender() {
   try {
     await fetch("https://lite-api.onrender.com/", { cache: "no-store" });
-    console.log("Render backend warmed up.");
   } catch (e) {
     console.log("Warm-up failed:", e);
   }
