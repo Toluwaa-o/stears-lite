@@ -18,7 +18,7 @@ async function fetchWithErrorHandling(url: string, options?: RequestInit) {
 
 async function getCompanyData(slug: string): Promise<CompanyData> {
     try {
-        let data = await fetchWithErrorHandling(
+        const data = await fetchWithErrorHandling(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${slug}/data`,
             { cache: 'no-cache' }
         );
