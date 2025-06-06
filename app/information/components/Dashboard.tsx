@@ -32,7 +32,7 @@ const Home: React.FC<CompanyDataProps> = ({ data }) => {
                     return res.json();
                 })
                 .then(info => {
-                    setCompanyData(info.result)
+                    setCompanyData(info)
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
