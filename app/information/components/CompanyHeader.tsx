@@ -16,7 +16,7 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, cou
         <div className="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-xl p-6 shadow-lg shadow-black/30 text-white">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold">{company.replace('company', '').trim()}</h1>
+                    <h1 className="text-3xl font-bold">{company.replace('(company)', '').trim()}</h1>
                     <p className="hidden md:block text-blue-100 mt-2 max-w-2xl md:max-w-full">
                         {description.length > 500 ? description.slice(0, 498) + '...' : description}
                     </p>
