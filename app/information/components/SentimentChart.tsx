@@ -26,6 +26,7 @@ interface SentimentChartProps {
 
 const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
     // Group articles by month and calculate average sentiment
+    console.log("Hitting Articles reduce....")
     const monthlyData = articles.reduce((acc, article) => {
         const date = new Date(article.published);
         const monthYear = `${date.getFullYear()}-${date.getMonth()}`;
@@ -75,6 +76,7 @@ const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
 
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 position: 'top' as const,
@@ -98,7 +100,7 @@ const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
     return (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <h2 className="font-semibold text-lg mb-4">News Sentiment Analysis</h2>
-            <div className="h-64">
+            <div className="h-80">
                 <Bar data={chartData} options={options} />
             </div>
         </div>
