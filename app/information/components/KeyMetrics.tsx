@@ -61,7 +61,6 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
         if (currentValue === null) return null;
 
         // Calculate comparison stats
-        console.log("Hitting Get comparison Info reduce....")
         const avg = competitorValues.reduce((a, b) => a + b, 0) / competitorValues.length;
         const max = Math.max(...competitorValues);
         const min = Math.min(...competitorValues);

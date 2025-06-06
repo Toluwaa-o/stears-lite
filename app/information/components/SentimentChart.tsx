@@ -26,7 +26,6 @@ interface SentimentChartProps {
 
 const SentimentChart: React.FC<SentimentChartProps> = ({ articles }) => {
     // Group articles by month and calculate average sentiment
-    console.log("Hitting Articles reduce....")
     const monthlyData = articles.reduce((acc, article) => {
         const date = new Date(article.published);
         const monthYear = `${date.getFullYear()}-${date.getMonth()}`;

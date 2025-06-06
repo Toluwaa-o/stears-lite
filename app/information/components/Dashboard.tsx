@@ -32,6 +32,7 @@ const Home: React.FC<CompanyDataProps> = ({ data }) => {
                     return res.json();
                 })
                 .then(info => {
+                    info['articles'] = data['articles']
                     setCompanyData(info)
                 })
                 .catch(error => {
@@ -123,7 +124,7 @@ const Home: React.FC<CompanyDataProps> = ({ data }) => {
                                     <FundingTimeline funding={companyData.funding} />
                                 </Suspense>
                                 <Suspense fallback={<div className="text-gray-500 text-center py-8 text-sm sm:text-base animate-pulse">Loading articles feed...</div>}>
-                                    <ArticlesFeed articles={data.articles} />
+                                    <ArticlesFeed articles={companyData.articles} />
                                 </Suspense>
                             </div>
                         </div>
