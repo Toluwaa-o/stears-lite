@@ -44,6 +44,7 @@ Stears Lite is a data-driven frontend application that lets users explore detail
 
    ```env
    NEXT_PUBLIC_API_URL=http://localhost:8000
+   MONGO_URI=mongodb+srv://example:....
    ```
 
 ## 🔗 Backend API
