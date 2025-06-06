@@ -53,7 +53,7 @@ const CompanyHeader: React.FC<CompanyHeaderProps> = ({ company, description, cou
 
                     {/* Disclaimer */}
                     <p className="text-blue-200 text-xs italic mt-4 max-w-2xl">
-                        Note: Figures such as revenue, valuation, and funding are based on publicly available sources and may not be independently verified.
+                        Note: Figures such as revenue, valuation, funding, e.t.c are based on publicly available sources and may not be independently verified.
                     </p>
                 </div>
             </div>
