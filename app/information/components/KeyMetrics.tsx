@@ -61,7 +61,7 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
         if (currentValue === null) return null;
 
         // Calculate comparison stats
-        const avg = competitorValues.reduce((a, b) => a + b, 0) / competitorValues.length;
+        const avg = competitorValues?.reduce((a, b) => a + b, 0) / competitorValues.length;
         const max = Math.max(...competitorValues);
         const min = Math.min(...competitorValues);
         const percentile = competitorValues.filter(v => v < currentValue).length / competitorValues.length * 100;
