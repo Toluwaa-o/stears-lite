@@ -71,14 +71,14 @@ export default function Header() {
                 />
 
                 <ul className="flex flex-col gap-4 md:flex-row md:gap-8 items-center">
-                    <li className="hidden md:flex transition-all">
+                    {!isHome && <li className="hidden md:flex transition-all">
                         {!showSearch && <IoMdSearch
                             className='text-gray-600'
                             size={20}
                             onClick={() => setShowSearch(true)}
                         />}
                         {showSearch && <SearchBar names={companyNames} isHeader={true} setShowSearch={setShowSearch} showSearch={showSearch} />}
-                    </li>
+                    </li>}
 
                     {!isCountries && (
                         <li onClick={() => setDisplay("hidden")}>

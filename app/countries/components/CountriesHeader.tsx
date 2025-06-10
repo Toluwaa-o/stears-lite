@@ -32,7 +32,7 @@ const CountriesHeader = ({ sortFieldChange, setAscending, sortField, ascending }
                         onKeyDown={(e) => {
                             if (e.key === 'Enter' || e.key === ' ') clickHandler(title);
                         }}
-                        className={`px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer ${category_colors[key]} max-w-[12rem] h-[3rem]`}
+                        className={`px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer ${category_colors[key]} max-w-[10rem] h-[3rem]`}
                     >
                         <div className="flex items-center gap-1 truncate" title={`${title}: ${indicator_descriptions[title]}`}>
                             <span className="truncate">{title}</span>
@@ -53,7 +53,7 @@ const CountriesHeader = ({ sortFieldChange, setAscending, sortField, ascending }
     return (
         <thead className="bg-gray-50">
             <tr>
-                <th className={`px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-normal break-words max-w-[12rem] cursor-pointer`} onClick={() => clickHandler('name')}>
+                <th className={`px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-normal break-words max-w-[10rem] cursor-pointer`} onClick={() => clickHandler('name')}>
                     <div className="flex items-center gap-1 truncate" title='Country name'><span className="truncate">Country - 2024</span>
                         {'name' === sortField && (
                             ascending ? (

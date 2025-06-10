@@ -2,6 +2,7 @@ export default function Sources() {
     const sources = [
         { name: "Wikipedia", url: "https://wikipedia.org" },
         { name: "WorldBank", url: 'https://www.worldbank.org/ext/en/home' },
+        { name: "African Monitor", url: "https://www.africanmonitor.org" },
         { name: "Google", url: "https://google.com" },
         { name: "Stears", url: "https://www.stears.co" },
         { name: "Crunchbase", url: "https://crunchbase.com" },
