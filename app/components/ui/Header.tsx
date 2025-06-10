@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { Playfair_Display } from "next/font/google";
 import { BiWorld } from 'react-icons/bi';
 import { FiDatabase } from 'react-icons/fi';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SearchBar from "./SearchBar";
 import { IoMdSearch } from "react-icons/io";
 

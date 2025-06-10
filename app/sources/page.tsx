@@ -19,7 +19,7 @@ export default function Sources() {
                     Data Sources & References
                 </h2>
                 <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                    We gather data from trusted and reputable sources to provide you with accurate and up-to-date company insights.
+                    We source reliable data to deliver clear, accurate, and timely insights on companies and macroeconomic trends.
                 </p>
                 <ul className="list-disc list-inside space-y-2 text-gray-700 text-base sm:text-lg">
                     {sources.map((source) => (
