@@ -1,5 +1,10 @@
 import { CountryData } from "@/types/Interfaces"
 import CountriesTable from "./components/CountriesTable"
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Countries - Stears Lite",
+};
 
 const getCountriesData = async (): Promise<CountryData[]> => {
 

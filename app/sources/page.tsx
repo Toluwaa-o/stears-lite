@@ -1,3 +1,9 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sources - Stears Lite",
+};
+
 export default function Sources() {
     const sources = [
         { name: "Wikipedia", url: "https://wikipedia.org" },
