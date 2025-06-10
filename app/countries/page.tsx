@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const getCountriesData = async (): Promise<CountryData[]> => {
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/countries`,
-        { cache: 'no-cache' })
+        { next: { revalidate: 60 * 60 * 24 } })
 
     if (!response.ok) throw Error("Something went wrong while fetching countries data!")
     const countriesData = await response.json()
