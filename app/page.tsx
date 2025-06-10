@@ -1,6 +1,6 @@
 import connectDB from "@/lib/mongodb";
 import SearchBar from "./components/ui/SearchBar";
-import Company from "@/models/CompanyData";
+import Company from "@/models/Company";
 import { Article, Competitors, FundingRound } from "@/types/Interfaces";
 
 export interface CompanyFull {
@@ -22,18 +22,18 @@ export interface CompanyFull {
   created_at: Date;
 }
 
-async function warmUpRender() {
-  try {
-    await fetch(`${process.env.LITE_API}`, { cache: "no-store" });
-  } catch (e) {
-    console.log("Warm-up failed:", e);
-  }
-}
+// async function warmUpRender() {
+//   try {
+//     await fetch(`${process.env.LITE_API}`, { cache: "no-store" });
+//   } catch (e) {
+//     console.log("Warm-up failed:", e);
+//   }
+// }
 
 
 async function getAllCompanies(): Promise<CompanyFull[]> {
   try {
-    await warmUpRender();
+    // await warmUpRender();
     await connectDB();
     const allCompanies = await Company.find({}).lean();
     return allCompanies as CompanyFull[];
@@ -70,7 +70,7 @@ const Home = async () => {
           </span>
         </p>
       </div>
-      <SearchBar names={companyNames} />
+      <SearchBar names={companyNames} isHeader={false} />
     </div>
   );
 }

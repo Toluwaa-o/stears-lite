@@ -1,5 +1,5 @@
 import connectDB from "@/lib/mongodb";
-import Company from "@/models/CompanyData";
+import Company from "@/models/Company";
 import { NextRequest, NextResponse } from "next/server";
 import Fuse from "fuse.js";
 

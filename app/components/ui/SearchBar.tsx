@@ -6,13 +6,24 @@ import { useRouter } from 'next/navigation'
 
 type CompanyNames = string[];
 
-const SearchBar = ({ names }: { names : CompanyNames}) => {
+type SearchBarProps = {
+    names: CompanyNames;
+    isHeader: boolean;
+    setShowSearch?: (value: boolean) => void;
+    showSearch?: boolean
+};
+
+const SearchBar = ({ names, isHeader, setShowSearch, showSearch }: SearchBarProps) => {
     const router = useRouter()
     const companyNames = useMemo(() => names.map(n => n), [])
 
     const randomStartingInteger = Math.floor(Math.random() * companyNames.length);
 
     const [placeholderCompany, setPlaceHolderCompany] = useState<string>(companyNames[randomStartingInteger])
+
+    const handleClick = () => {
+        setShowSearch?.(!showSearch);
+    };
 
     useEffect(() => {
         const updatePlaceHolderCompany = setInterval(() => {
@@ -37,6 +48,7 @@ const SearchBar = ({ names }: { names : CompanyNames}) => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        handleClick()
         if (company.trim()) {
             router.push(`/information/${company.trim().toLowerCase()}`);
         } else {
@@ -55,28 +67,37 @@ const SearchBar = ({ names }: { names : CompanyNames}) => {
 
     return (
         <form
-            className="flex flex-col items-start justify-center gap-4 w-full"
+            className={`flex flex-col items-start justify-center w-full gap-4`}
             onSubmit={handleSubmit}
         >
-            <div className={`flex items-center border ${errorMessage ? 'border-red-500' : 'border-gray-300'
-                } bg-white rounded-md overflow-hidden h-12 w-full max-w-2xl focus-within:ring-2 ${errorMessage ? 'focus-within:ring-red-500/30' : 'focus-within:ring-blue-500/30'
-                } transition-all duration-200 shadow-sm`}>
+            <div
+                className={`flex items-center border ${errorMessage ? 'border-red-500' : 'border-gray-300'
+                    } bg-white rounded-md overflow-hidden h-11 w-full max-w-2xl focus-within:ring-2 ${errorMessage ? 'focus-within:ring-red-500/30' : 'focus-within:ring-blue-500/30'
+                    } transition-all duration-200 shadow-sm ${isHeader ? 'md:h-9 md:max-w-xl' : ''}`}
+            >
                 <input
                     type="text"
                     aria-label="Company"
-                    placeholder={`${errorMessage ? errorMessage : 'Search ' + '"' + placeholderCompany + '"'}`}
+                    placeholder={
+                        errorMessage ? errorMessage : `Search "${placeholderCompany}"`
+                    }
                     name="company"
-                    className={`bg-transparent ${errorMessage ? "placeholder:text-red-500" : 'placeholder:text-gray-500'
-                        } w-full h-full px-4 py-2 outline-none text-sm sm:text-base text-gray-900`}
+                    className={`bg-transparent ${errorMessage ? 'placeholder:text-red-500' : 'placeholder:text-gray-500'
+                        } w-full h-full px-4 py-1.5 outline-none ${isHeader ? 'text[0.9rem] placeholder:text-[0.9rem]' : 'text-sm sm:text-base'} text-gray-900`}
                     onChange={(e) => setCompany(e.target.value)}
                 />
                 <button
                     type="submit"
                     className={`h-full px-4 transition-colors ${errorMessage ? 'hover:bg-red-50' : 'hover:bg-blue-50'
                         }`}
+                    title="Search"
+                    aria-label="Search"
                 >
-                    <IoMdSearch className={`${errorMessage ? 'text-red-500' : 'text-blue-600'
-                        }`} size={20} />
+                    <IoMdSearch
+                        className={`${errorMessage ? 'text-red-500' : 'text-blue-600'
+                            } ${isHeader ? 'text-gray-600' : 'text-blue-600'}`}
+                        size={20}
+                    />
                 </button>
             </div>
         </form>

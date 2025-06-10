@@ -41,3 +41,11 @@ export interface CompanyData {
     updated_at: Date;
     created_at: Date;
 }
+
+export interface CountryData {
+    name: string,
+    data: {
+        [key: string]: number | string | null;
+    };
+    updated_at: Date
+}

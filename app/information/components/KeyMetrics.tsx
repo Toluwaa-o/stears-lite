@@ -1,5 +1,6 @@
 import { Competitors } from "@/types/Interfaces";
 import parseFinancialString from "@/utils/NumberParser";
+import getWidthClass from "@/utils/PercentileWidth";
 
 interface KeyMetricsProps {
     metrics: {
@@ -93,13 +94,12 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
                 </div>
 
                 <div className="relative pt-1">
-                    <div className="flex h-1.5 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
+                    <div className="flex h-1.5 overflow-hidden rounded-full bg-gray-500">
                         <div
-                            className={`flex-1 rounded-full ${comparison.isAboveAvg
+                            className={`flex rounded-full ${getWidthClass(comparison.percentile)} ${comparison.isAboveAvg
                                 ? 'bg-emerald-500/80 dark:bg-emerald-400/80'
                                 : 'bg-rose-500/80 dark:bg-rose-400/80'
                                 }`}
-                            style={{ width: `${comparison.percentile}%` }}
                         />
                     </div>
                 </div>
@@ -107,19 +107,19 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
                 <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="text-center">
                         <div className="text-gray-400 dark:text-gray-400">Min</div>
-                        <div className="font-medium text-gray-600 dark:text-gray-300">
+                        <div className="font-medium text-gray-400">
                             ${comparison.min?.toLocaleString()}
                         </div>
                     </div>
                     <div className="text-center">
                         <div className="text-gray-400 dark:text-gray-400">Avg</div>
-                        <div className="font-medium text-gray-600 dark:text-gray-300">
+                        <div className="font-medium text-gray-400">
                             ${comparison.avg?.toLocaleString()}
                         </div>
                     </div>
                     <div className="text-center">
                         <div className="text-gray-400 dark:text-gray-400">Max</div>
-                        <div className="font-medium text-gray-600 dark:text-gray-300">
+                        <div className="font-medium text-gray-400">
                             ${comparison.max?.toLocaleString()}
                         </div>
                     </div>
@@ -179,7 +179,7 @@ const KeyMetrics: React.FC<KeyMetricsProps> = ({ metrics, employeeCount, competi
                         </div>
 
                         {valueIsNumeric && isGrowthMetric && (
-                            <span className={`text-xs mt-1 block ${isPositiveGrowth ? 'text-green-600' : 'text-red-600'
+                            <span className={`text-xs mt-1 block ${isPositiveGrowth ? 'text-green-500' : 'text-red-600'
                                 }`}>
                                 {isPositiveGrowth ? 'Increased' : 'Decreased'} from previous year
                             </span>
