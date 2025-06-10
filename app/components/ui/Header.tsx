@@ -26,7 +26,6 @@ export default function Header() {
     const isSource = pathname === '/sources'
     const isCountries = pathname === '/countries'
 
-    useEffect(() => {console.log(showSearch)}, [showSearch])
     const companyNames = [
         { company: "Dangote Group" },
         { company: "MTN Group" },

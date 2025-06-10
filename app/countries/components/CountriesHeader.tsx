@@ -24,6 +24,7 @@ const CountriesHeader = ({ sortFieldChange, setAscending, sortField, ascending }
             if (indicatorCategories[key].indexOf(title) >= 0) {
                 return (
                     <th
+                        key={title}
                         scope="col"
                         role="columnheader"
                         tabIndex={0}
