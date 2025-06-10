@@ -1,7 +1,7 @@
 import { CountryData } from "@/types/Interfaces"
 import CountriesTable from "./components/CountriesTable"
 
-export const getCountriesData = async (): Promise<CountryData[]> => {
+const getCountriesData = async (): Promise<CountryData[]> => {
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/countries`,
         { cache: 'no-cache' })
@@ -12,12 +12,12 @@ export const getCountriesData = async (): Promise<CountryData[]> => {
     return countriesData.data
 }
 
-const page = async () => {
+const Page = async () => {
     const data = await getCountriesData()
-    
+
     return (
         <CountriesTable data={data} />
     )
 }
 
-export default page
+export default Page
