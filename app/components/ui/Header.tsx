@@ -9,7 +9,6 @@ import { BiWorld } from 'react-icons/bi';
 import { FiDatabase } from 'react-icons/fi';
 import { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
-import { CompanyFull } from "@/app/page";
 import { IoMdSearch } from "react-icons/io";
 
 const playfair = Playfair_Display({
