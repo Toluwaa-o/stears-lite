@@ -83,7 +83,7 @@ const SearchBar = ({ names, isHeader, setShowSearch, showSearch }: SearchBarProp
                     }
                     name="company"
                     className={`bg-transparent ${errorMessage ? 'placeholder:text-red-500' : 'placeholder:text-gray-500'
-                        } w-full h-full px-4 py-1.5 outline-none ${isHeader ? 'text[0.9rem] placeholder:text-[0.9rem]' : 'text-sm sm:text-base'} text-gray-900`}
+                        } w-full h-full px-4 py-1.5 outline-none ${isHeader ? 'text[0.9rem] placeholder:text-[0.9rem]' : 'text-[16px] md:text-sm'} text-gray-900`}
                     onChange={(e) => setCompany(e.target.value)}
                 />
                 <button
