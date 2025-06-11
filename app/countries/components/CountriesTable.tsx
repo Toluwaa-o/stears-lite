@@ -43,8 +43,14 @@ const CountriesTable: React.FC<Props> = ({ data }: Props) => {
             <div className="px-2 py-2 bg-gray-50">
                 <ColorLegend />
             </div>
+            <div className="px-4 pt-2 text-sm text-gray-600">
+                <p>
+                    <strong>Note:</strong> All economic indicators shown are based on the most recent complete year of data available from sources like the IMF, African Monitor and World Bank, which is currently <strong>2024</strong>.
+                    Due to the time required for data collection, validation, and publication, 2025 data is not yet officially released.
+                </p>
+            </div>
             <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
+                <table className="min-w-full divide-y divide-gray-200 relative">
                     <CountriesHeader sortFieldChange={setSortField} setAscending={setAscending} sortField={sortField} ascending={ascending} />
                     <tbody className="bg-white divide-y divide-gray-200">
                         {countriesData.map(dt => <CountriesRow countryData={dt} allData={countriesData} key={dt.name} />)}

@@ -55,10 +55,10 @@ const CountriesHeader = ({ sortFieldChange, setAscending, sortField, ascending }
     }
 
     return (
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-50 sticky top-0">
             <tr className="relative">
-                <th className={`px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-normal break-words max-w-[10rem] cursor-pointer sticky left-0 md:relative md:left-[unset] bg-gray-50`} onClick={() => clickHandler('name')}>
-                    <div className="flex items-center gap-1 truncate" title='Country name'><span className="truncate">Country - 2024</span>
+                <th className={`px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-normal break-words max-w-[10rem] cursor-pointer sticky left-0 bg-gray-50`} onClick={() => clickHandler('name')}>
+                    <div className="flex items-center gap-1 truncate" title='Country name'><span className="truncate">Country</span>
                         {'name' === sortField && (
                             ascending ? (
                                 <IoMdArrowDropup className="text-gray-500 w-5 h-5" />

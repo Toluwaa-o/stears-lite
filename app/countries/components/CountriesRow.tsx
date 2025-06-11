@@ -36,7 +36,7 @@ const CountriesRow: React.FC<Props> = ({ countryData, allData }: Props) => {
 
     return (
         <tr className="relative">
-            <th className={`px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-900 sticky left-0 bg-gray-50 md:relative md:left-[unset]`}>
+            <th className={`px-6 py-4 whitespace-nowrap text-left text-sm font-medium text-gray-900 sticky left-0 bg-gray-50`}>
                 <span className="truncate" title={countryData.name}>{countryData.name}</span>
             </th>
             {indicatorOrder.map(title => (
