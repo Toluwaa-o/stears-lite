@@ -70,7 +70,14 @@ const Home = async () => {
           </span>
         </p>
       </div>
+
       <SearchBar names={companyNames} isHeader={false} />
+      <div className="bg-gray-50 text-gray-700 px-5 py-4 text-sm rounded-lg border border-gray-200">
+        <p>
+          <strong className="font-medium">Note:</strong> Company information is collected from publicly available online sources. If a company has little or no online presence, details may be incomplete or unavailable.
+        </p>
+      </div>
+
     </div>
   );
 }
