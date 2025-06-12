@@ -50,7 +50,7 @@ const SearchBar = ({ names, isHeader, setShowSearch, showSearch }: SearchBarProp
         e.preventDefault();
         handleClick()
         if (company.trim()) {
-            router.push(`/information/${company.trim().toLowerCase()}`);
+            router.push(`/companies/${company.trim().toLowerCase()}`);
         } else {
             setErrorMessage("Please, enter a company name.")
         }

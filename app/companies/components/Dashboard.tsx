@@ -46,7 +46,7 @@ const Home: React.FC<CompanyDataProps> = ({ data }) => {
 
     if (error) return <InlineError message={error} />;
 
-    if (!companyData) return <LoadingPageLayout scrapingPage={true} />;
+    if (!companyData) return <LoadingPageLayout scrapingPage={'scrapping'} />;
 
     return (
         <div className="min-h-screen bg-gray-50">

@@ -8,14 +8,20 @@ const FormatIndicators = (title: string, raw: number | null, allData: CountryDat
         .filter(v => typeof v === "number") as number[];
 
     if (benchmarkIndicators.includes(title)) {
-        if (typeof raw === "number" && allValues.length > 5) {
-            const sorted = [...allValues].sort((a, b) => a - b);
-            const index = sorted.findIndex(v => v >= raw);
-            const percentile = (index / sorted.length) * 100;
+        if (title === 'Total labor force (number of people)') {
+            if (typeof raw === "number" && allValues.length > 5) {
+                valueColor = "text-gray-700"
+            }
+        } else {
+            if (typeof raw === "number" && allValues.length > 5) {
+                const sorted = [...allValues].sort((a, b) => a - b);
+                const index = sorted.findIndex(v => v >= raw);
+                const percentile = (index / sorted.length) * 100;
 
-            if (percentile >= 75) valueColor = "text-green-500";
-            else if (percentile >= 40) valueColor = "text-gray-500";
-            else valueColor = "text-red-500";
+                if (percentile >= 75) valueColor = "text-green-500";
+                else if (percentile >= 40) valueColor = "text-gray-500";
+                else valueColor = "text-red-500";
+            }
         }
     } else {
         if (typeof raw === 'number') {

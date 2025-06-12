@@ -18,8 +18,10 @@ const loadingMessages = [
     'Almost done...'
 ];
 
+const otherMessages = ["Fetching data...", "Almost done..."]
+
 interface Prop {
-    scrapingPage: boolean
+    scrapingPage: string
 }
 
 const LoadingPageLayout = ({ scrapingPage }: Prop) => {
@@ -43,6 +45,16 @@ const LoadingPageLayout = ({ scrapingPage }: Prop) => {
         return () => clearInterval(interval);
     }, []);
 
+    const [stepOther, setStepOther] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setStepOther((prev) => (prev < otherMessages.length - 1 ? prev + 1 : prev));
+        }, 10000); // 10 seconds per step
+
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <div className="flex flex-col items-center justify-center h-screen w-screen bg-white px-4 fixed top-0 left-0 z-[101]">
             <div className="relative mb-8 w-28 h-28">
@@ -59,16 +71,22 @@ const LoadingPageLayout = ({ scrapingPage }: Prop) => {
                 </div>
             </div>
 
-            {scrapingPage ? (
+            {scrapingPage === 'scrapping' ? (
                 <div className="max-w-md text-center space-y-4">
                     <p className="text-lg font-medium text-gray-700">
                         {scrappingMessages[stepScrapping]}
                     </p>
                 </div>
-            ) : (
+            ) : scrapingPage === 'loading' ? (
                 <div className="max-w-md text-center space-y-4">
                     <p className="text-lg font-medium text-gray-700">
                         {loadingMessages[stepLoading]}
+                    </p>
+                </div>
+            ) : (
+                <div className="max-w-md text-center space-y-4">
+                    <p className="text-lg font-medium text-gray-700">
+                        {otherMessages[stepOther]}
                     </p>
                 </div>
             )}
