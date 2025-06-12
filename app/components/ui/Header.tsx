@@ -79,6 +79,18 @@ export default function Header() {
                         {showSearch && <SearchBar names={companyNames} isHeader={true} setShowSearch={setShowSearch} showSearch={showSearch} />}
                     </li>}
 
+                    {!isHome && (
+                        <li onClick={() => setDisplay("hidden")}>
+                            <Link
+                                href="/"
+                                className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-gray-100 hover:text-gray-900 transition"
+                            >
+                                <AiOutlineHome className="w-7 h-7 md:w-5 md:h-5 text-gray-600" />
+                                <span className="tracking-tight text-lg md:text-sm">Home</span>
+                            </Link>
+                        </li>
+                    )}
+
                     {!isCountries && (
                         <li onClick={() => setDisplay("hidden")}>
                             <Link
@@ -99,18 +111,6 @@ export default function Header() {
                             >
                                 <FiDatabase className="w-7 h-7 md:w-5 md:h-5 text-gray-600" />
                                 <span className="tracking-tight text-lg md:text-sm">Sources</span>
-                            </Link>
-                        </li>
-                    )}
-
-                    {!isHome && (
-                        <li onClick={() => setDisplay("hidden")}>
-                            <Link
-                                href="/"
-                                className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-gray-100 hover:text-gray-900 transition"
-                            >
-                                <AiOutlineHome className="w-7 h-7 md:w-5 md:h-5 text-gray-600" />
-                                <span className="tracking-tight text-lg md:text-sm">Home</span>
                             </Link>
                         </li>
                     )}
