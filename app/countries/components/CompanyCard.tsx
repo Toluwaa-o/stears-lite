@@ -10,7 +10,7 @@ const CompanyCard = ({ company }: Props) => {
     const company_name = company.company.replace('(company)', '').trim()
 
     return (
-        <li key={company_name} className="h-full">
+        <li className="h-full">
             <Link
                 href={`/companies/${company_name}`}
                 className="flex flex-col h-full p-4 border border-gray-200 rounded-xl hover:shadow-sm transition bg-white"

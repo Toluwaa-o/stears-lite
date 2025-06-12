@@ -1,7 +1,6 @@
 import connectDB from "@/lib/mongodb"
 import Company from "@/models/Company"
 import { CompanyData } from "@/types/Interfaces"
-import Link from "next/link"
 import NoCompaniesMessage from "../components/NoCompaniesMessage"
 import CompanyCard from "../components/CompanyCard"
 
@@ -32,7 +31,7 @@ const page = async ({ params, }: { params: Promise<{ slug: string }> }) => {
             </div>
 
             <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-                {companies.map((company: CompanyData) => <CompanyCard company={company} />)}
+                {companies.map((company: CompanyData) => <CompanyCard company={company} key={company.company} />)}
             </ul>
 
         </div>
