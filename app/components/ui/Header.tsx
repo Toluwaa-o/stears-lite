@@ -69,7 +69,7 @@ export default function Header() {
                     onClick={() => setDisplay("hidden")}
                 />
 
-                <ul className="flex flex-col gap-4 md:flex-row md:gap-8 items-center">
+                <ul className="flex flex-col gap-4 md:flex-row md:gap-8 md:items-center">
                     {!isHome && <li className="hidden md:flex transition-all">
                         {!showSearch && <IoMdSearch
                             className='text-gray-600'
