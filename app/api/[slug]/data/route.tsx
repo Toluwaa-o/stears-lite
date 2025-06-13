@@ -12,11 +12,12 @@ export async function GET(
     await connectDB();
 
     const { slug } = await params;
+    const cleanedSlug = slug.replace('%20', ' ')
 
     try {
         // 1. Try regex search first, limit 1
         const regexResult = await Company.findOne({
-            company: { $regex: slug, $options: "i" },
+            company: { $regex: cleanedSlug, $options: "i" },
         }).lean();
 
         if (regexResult) {
@@ -31,12 +32,12 @@ export async function GET(
             threshold: 0.3,
         });
 
-        const fuseResults = fuse.search(slug);
+        const fuseResults = fuse.search(cleanedSlug);
         if (fuseResults.length > 0) {
             return NextResponse.json({ result: fuseResults[0].item, success: true }, { status: 200 });
         }
 
-        const data = { "company": slug }
+        const data = { "company": cleanedSlug }
         return NextResponse.json({ result: data }, { status: 200 })
     } catch (error) {
         console.error("Search error:", error);

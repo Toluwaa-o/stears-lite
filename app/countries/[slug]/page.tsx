@@ -12,10 +12,12 @@ const getCountryCompanies = async (slug: string): Promise<CompanyData[]> => {
 
 const page = async ({ params, }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params
-    const companies = await getCountryCompanies(slug)
+    const cleanedSlug = slug.replace('%20', ' ')
+    const companies = await getCountryCompanies(cleanedSlug)
+
     if (!companies || companies.length === 0) {
         return (
-            <NoCompaniesMessage slug={slug} />
+            <NoCompaniesMessage slug={cleanedSlug} />
         )
     }
 
@@ -23,10 +25,10 @@ const page = async ({ params, }: { params: Promise<{ slug: string }> }) => {
         <div className="px-6 py-12 max-w-6xl mx-auto">
             <div className="mb-10">
                 <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 capitalize">
-                    Companies in {slug}
+                    Companies in {cleanedSlug}
                 </h1>
                 <p className="mt-2 text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl">
-                    This is a curated list of companies in <strong>{slug}</strong> for which we currently have data. You can still search for other companies using the search bar. Click on any company to explore detailed insights.
+                    This is a curated list of companies in <strong>{cleanedSlug}</strong> for which we currently have data. You can still search for other companies using the search bar. Click on any company to explore detailed insights.
                 </p>
             </div>
 

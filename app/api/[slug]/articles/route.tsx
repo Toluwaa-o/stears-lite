@@ -11,7 +11,8 @@ export async function GET(
   await connectDB;
 
   const { slug } = await params;
+  const cleanedSlug = slug.replace('%20', ' ')
 
-  const articles = await fetchGoogleNews(slug);
+  const articles = await fetchGoogleNews(cleanedSlug);
   return NextResponse.json({ articles, success: true }, { status: 200 });
 };

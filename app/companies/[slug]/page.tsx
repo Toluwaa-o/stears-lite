@@ -54,7 +54,8 @@ async function getCompanyData(slug: string): Promise<CompanyData> {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
-    const data = await getCompanyData(slug);
+    const cleanedSlug = slug.replace('%20', ' ')
+    const data = await getCompanyData(cleanedSlug);
 
     return {
         title: `${data.company} - Company Insights`,
@@ -64,7 +65,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 const page = async ({ params, }: { params: Promise<{ slug: string }> }) => {
     const { slug } = await params
-    const data = await getCompanyData(slug);
+    const cleanedSlug = slug.replace('%20', ' ')
+    console.log(cleanedSlug)
+    const data = await getCompanyData(cleanedSlug);
 
     return (
         <Home data={data} />
